@@ -1,0 +1,33 @@
+<?php
+/**
+ * @see Newsman_Newsletter_Block_Adminhtml_System_Config_Manualsync
+ */
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    function manualSync() {
+        var elem = $('<?php echo $this->getHtmlId() ?>');
+
+        new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
+            onSuccess: function(response) {
+                result = '<?php echo Mage::helper('core')->jsQuoteEscape($this->__('The manual sync failed.')) ?>';
+                try {
+                    response = response.responseText;
+                    if (response == 1) {
+                        result = '<?php echo Mage::helper('core')->jsQuoteEscape($this->__('Success! Full sync will be done in a few minutes.')) ?>';
+                        elem.removeClassName('fail').addClassName('success')
+                    } else {
+                        elem.removeClassName('success').addClassName('fail')
+                    }
+                } catch (e) {
+                    elem.removeClassName('success').addClassName('fail')
+                }
+                $('manual_sync_result').update(result);
+            }
+        });
+    }
+    //]]>
+</script>
+<button onclick="javascript:manualSync(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span id="manual_sync_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>
