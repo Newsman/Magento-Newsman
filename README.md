@@ -21,11 +21,11 @@ In your Magento admin panel, go to **System > Magento Connect > Magento Connect 
 	
 ## Configuration
 1. Go to **System > Configuration > Newsman > 
-Newsletter Subscriber Import > General Settings > Enable** and enable the module. Fill in your Newsman API KEY and User ID and click the save button.
+Newsletter Subscriber Import > General Settings > Enable** and enable the module. Fill in your [Newsman](https://www.newsmanapp.com) API KEY and User ID and click the save button.
 
   ![General Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/general_settings.png)
 
-2. After the Newsman API KEY and User ID are set, you can choose a list.
+2. After the [Newsman](https://www.newsmanapp.com) API KEY and User ID are set, you can choose a list.
 
 3. Choose destination segments for your newsletter subscribers and customer groups. This configuration is optional and if it's not set all the customers and subscribers will be imported without being assigned to a segment. For the segments to show up in this form, you need to set them up in your Newsman account first.
 
