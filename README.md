@@ -31,7 +31,7 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
 
   ![Data Mapping](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/data_mapping.png)
 
-4. Choose how often you want your lists to get uploaded to Newsman You can also do a manual synchronization by clicking "Manual Sync".
+4. Choose how often you want your lists to get uploaded to [Newsman](https://www.newsmanapp.com) You can also do a manual synchronization by clicking "Manual Sync".
 
   ![Synchronization Schedule](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/synchronization_schedule.png)
 
