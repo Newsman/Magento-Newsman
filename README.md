@@ -1,8 +1,8 @@
 # Magento-Newsman
 
-Newsman module for Magento. Sync your Magento customers / subscribers to Newsman list / segments. 
+[Newsman](https://www.newsmanapp.com) module for Magento. Sync your Magento customers / subscribers to [Newsman](https://www.newsmanapp.com) list / segments. 
 
-This is the easiest way to connect your Shop with Newsman. Generate an API KEY in your Newsman account, install this plugin and you will be able to sync your shop customers and newsletter subscribers with Newsman list / segments.
+This is the easiest way to connect your Shop with [Newsman](https://www.newsmanapp.com). Generate an API KEY in your [Newsman](https://www.newsmanapp.com) account, install this plugin and you will be able to sync your shop customers and newsletter subscribers with [Newsman](https://www.newsmanapp.com) list / segments.
 Installation
 
 ## Manual installation: 
