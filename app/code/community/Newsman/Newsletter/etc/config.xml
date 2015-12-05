@@ -27,13 +27,14 @@
                     <subscriber>Newsman_Newsletter_Model_Subscriber</subscriber>
                 </rewrite>
             </newsletter>
-            <newsletter_resource>
+            <newsletter_mysql4>
                 <rewrite>
                     <subscriber_collection>Newsman_Newsletter_Model_Resource_Subscriber_Collection</subscriber_collection>
                 </rewrite>
-            </newsletter_resource>
+            </newsletter_mysql4>
             <newsman_newsletter_resource>
                 <class>Newsman_Newsletter_Model_Resource</class>
+                <deprecatedNode>newsman_newsletter_mysql4</deprecatedNode>
                 <entities>
                     <task>
                         <table>newsman_task</table>
@@ -87,7 +88,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <xmlconnect before="Mage_Adminhtml">Newsman_Newsletter_Adminhtml</xmlconnect>
+                        <newsman_newsletter before="Mage_Adminhtml">Newsman_Newsletter_Adminhtml</newsman_newsletter>
                     </modules>
                 </args>
             </adminhtml>

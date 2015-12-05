@@ -6,7 +6,7 @@
  * @category   Newsman
  * @package    Newsman_Newsletter
  */
-class Newsman_Newsletter_Block_Adminhtml_Form_Field_Segment extends Mage_Core_Block_Html_Select
+class Newsman_Newsletter_Block_Adminhtml_Form_Field_Segment extends Newsman_Newsletter_Block_Html_Select
 {
     /**
      * Segments cache

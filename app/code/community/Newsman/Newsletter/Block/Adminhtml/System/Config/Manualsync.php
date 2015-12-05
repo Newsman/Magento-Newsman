@@ -42,8 +42,9 @@ class Newsman_Newsletter_Block_Adminhtml_System_Config_Manualsync extends Mage_A
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
         $originalData = $element->getOriginalData();
+        $buttonLabel = isset($originalData['button_label']) ? $originalData['button_label'] : 'Manual Sync';
         $this->addData(array(
-            'button_label' => Mage::helper('customer')->__($originalData['button_label']),
+            'button_label' => Mage::helper('customer')->__($buttonLabel),
             'html_id' => $element->getHtmlId(),
             'ajax_url' => Mage::getSingleton('adminhtml/url')->getUrl('*/newsletter_system_config_synchronization/manualsync')
         ));

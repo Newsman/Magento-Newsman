@@ -6,7 +6,7 @@
  * @category    Newsman
  * @package     Newsman_Newsletter
  */
-class Newsman_Newsletter_Model_Resource_Subscriber_Collection extends Mage_Newsletter_Model_Resource_Subscriber_Collection
+class Newsman_Newsletter_Model_Resource_Subscriber_Collection extends Mage_Newsletter_Model_Mysql4_Subscriber_Collection
 {
     /**
      * Adds customer info to select

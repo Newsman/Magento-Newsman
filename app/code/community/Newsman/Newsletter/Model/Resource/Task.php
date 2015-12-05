@@ -6,7 +6,7 @@
  * @category  Newsman
  * @package   Newsman_Newsletter
  */
-class Newsman_Newsletter_Model_Resource_Task extends Mage_Core_Model_Resource_Db_Abstract
+class Newsman_Newsletter_Model_Resource_Task extends Mage_Core_Model_Mysql4_Abstract
 {
     /**
      * Constructor
