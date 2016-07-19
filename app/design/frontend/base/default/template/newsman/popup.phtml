@@ -1,0 +1,57 @@
+<?php
+/** @var $this Newsman_Newsletter_Block_Popup */
+?>
+<div style="display: none">
+    <div id="newsletter-popup">
+        <div id="newsletter-popup-container">
+            <div class="block block-subscribe">
+                <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-popup-validate-detail">
+                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId($this->getNewsletterPopupDesign())->toHtml() ?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    var newsletterSubscriberFormDetail = new VarienForm('newsletter-popup-validate-detail');
+    //]]>
+
+    jQuery(document).ready(function() {
+        var lifetime = <?php echo $this->getNewsletterDelayDisplay() ?>;
+        setTimeout(update, lifetime * 1000);
+    });
+
+    function update() {
+        var cookieCheck = Mage.Cookies.get('<?php echo $this->getDisplayCookie() ?>');
+        if (cookieCheck == null && jQuery(window).width() >= <?php echo $this->getWindowResolution() ?>) {
+            beginNewsletterForm();
+        }
+    }
+
+    function beginNewsletterForm() {
+        jQuery.fancybox({
+            'maxWidth': 800,
+            'maxHeight': 600,
+            'width': '70%',
+            'height': '70%',
+            'autoScale': true,
+            'transitionIn': 'fade',
+            'transitionOut': 'fade',
+            'showCloseButton': true,
+            'type': 'inline',
+            'href': '#newsletter-popup',
+            'afterLoad': function () {
+                var lifetime = <?php echo $this->getNewsletterCookieLifetime() ?>;
+                var expireAt = Mage.Cookies.expires;
+                if (lifetime > 0) {
+                    expireAt = new Date();
+                    expireAt.setTime(expireAt.getTime() + lifetime * 24 * 60 * 60 * 1000);
+                }
+                Mage.Cookies.set('<?php echo $this->getDisplayCookie() ?>', '<?php echo $this->getDisplayCookieValue() ?>', expireAt);
+            }
+        });
+        jQuery("#newsletter-popup").trigger('click');
+    }
+</script>

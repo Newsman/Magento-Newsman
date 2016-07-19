@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addItem" ifconfig="newsman_newsletter/popup_settings/enable">
+                <type>js_css</type>
+                <stylesheet>fancybox/jquery.fancybox.css</stylesheet>
+            </action>
+            <action method="addItem" ifconfig="newsman_newsletter/popup_settings/enable">
+                <type>js_css</type>
+                <stylesheet>fancybox/helpers/jquery.fancybox-buttons.css</stylesheet>
+            </action>
+            <action method="addJs" ifconfig="newsman_newsletter/popup_settings/enable">
+                <script>fancybox/jquery.fancybox.js</script>
+            </action>
+            <action method="addJs" ifconfig="newsman_newsletter/popup_settings/enable">
+                <script>fancybox/helpers/jquery.fancybox-buttons.js</script>
+            </action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="newsman_newsletter/popup" name="newsman.popup" as="newsman_popup" template="newsman/popup.phtml" />
+        </reference>
+    </default>
+</layout>

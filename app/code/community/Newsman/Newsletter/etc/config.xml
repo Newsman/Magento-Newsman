@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Newsman_Newsletter>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Newsman_Newsletter>
     </modules>
 
@@ -27,6 +27,12 @@
                     <subscriber>Newsman_Newsletter_Model_Subscriber</subscriber>
                 </rewrite>
             </newsletter>
+            <core>
+                <rewrite>
+                    <email_queue>Newsman_Newsletter_Model_Email_Queue</email_queue>
+                    <email_template>Newsman_Newsletter_Model_Email_Template</email_template>
+                </rewrite>
+            </core>
             <newsletter_mysql4>
                 <rewrite>
                     <subscriber_collection>Newsman_Newsletter_Model_Resource_Subscriber_Collection</subscriber_collection>
@@ -124,6 +130,15 @@
             </modules>
         </translate>
     </adminhtml>
+    <frontend>
+        <layout>
+            <updates>
+                <newsman_newsletter>
+                    <file>newsman.xml</file>
+                </newsman_newsletter>
+            </updates>
+        </layout>
+    </frontend>
     <crontab>
         <jobs>
             <subscribers_synchronization>
@@ -152,6 +167,17 @@
                 <clear_failed_tasks>1</clear_failed_tasks>
                 <delete_processed_tasks>1</delete_processed_tasks>
             </subscribers_import>
+            <popup_settings>
+                <design>newsman_newsletter_popup</design>
+                <cookie_lifetime>120</cookie_lifetime>
+                <window_resolution>600</window_resolution>
+                <delay_display>15</delay_display>
+            </popup_settings>
         </newsman_newsletter>
+        <newsletter>
+            <subscription>
+                <confirm>1</confirm>
+            </subscription>
+        </newsletter>
     </default>
 </config>
