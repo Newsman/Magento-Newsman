@@ -37,3 +37,19 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
   ![Synchronization Schedule](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/synchronization_schedule.png)
 
 5. For the automatic synchronization to work, you need to have Magento's built-in cron job functionality enabled.
+
+6. You have the option to send all Magento's transactional emails via Newsman's SMTP server. The server requires authentication, so here's how to set it up:
+   ![Mail Sending Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/mail_sending_settings.png)
+
+7. Gain more subscribers with our newsletter popup. 
+   ![Newsletter Popup](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup.png)   
+The feature allows you to:
+  * enable or disable the feature at any moment
+  * the content of the feature is set by default in the *Newsman Newsletter Popup* CMS static block; choose or change the design entirely by selecting / creating another CMS static block;  
+  ![Newsletter CMS static block](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup_cms_static_block.png)
+  * set the number of seconds that need to pass before the popup is shown
+  * set the number of days from the first display of the popup until the next one.
+  
+   ![Newsletter Popup Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup_settings.png)
+
+  
