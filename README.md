@@ -42,7 +42,9 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
    ![Mail Sending Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/mail_sending_settings.png)
 
 7. Gain more subscribers with our newsletter popup. 
-   ![Newsletter Popup](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup.png)   
+
+   ![Newsletter Popup](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup.png)  
+   
 The feature allows you to:
   * enable or disable the feature at any moment
   * the content of the feature is set by default in the *Newsman Newsletter Popup* CMS static block; choose or change the design entirely by selecting / creating another CMS static block;  
