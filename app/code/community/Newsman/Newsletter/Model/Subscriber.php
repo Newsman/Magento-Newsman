@@ -79,12 +79,13 @@ class Newsman_Newsletter_Model_Subscriber extends Mage_Newsletter_Model_Subscrib
     /**
      * Unsubscribes loaded subscription
      *
+     * @param bool|true $useSync
      * @return Newsman_Newsletter_Model_Subscriber
      */
-    public function unsubscribe()
+    public function unsubscribe($useSync = true)
     {
         parent::unsubscribe();
-        if (Mage::helper('newsman_newsletter')->useAutoSync()) {
+        if ($useSync && Mage::helper('newsman_newsletter')->useAutoSync()) {
             Mage::dispatchEvent('newsletter_subscriber_unsubscribe', array('subscriber' => $this));
         }
 

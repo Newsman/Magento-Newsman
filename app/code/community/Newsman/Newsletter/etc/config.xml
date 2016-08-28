@@ -80,8 +80,7 @@
         </events>
         <template>
             <email>
-                <newsman_newsletter_subscribers_synchronization_error_email_template translate="label"
-                                                                                     module="newsman_newsletter">
+                <newsman_newsletter_subscribers_synchronization_error_email_template translate="label" module="newsman_newsletter">
                     <label>Newsman Subscribers Import</label>
                     <file>newsman_subscriber_import_warning.html</file>
                     <type>text</type>
@@ -131,6 +130,15 @@
         </translate>
     </adminhtml>
     <frontend>
+        <routers>
+            <newsman_newsletter>
+                <use>standard</use>
+                <args>
+                    <module>Newsman_Newsletter</module>
+                    <frontName>newsman</frontName>
+                </args>
+            </newsman_newsletter>
+        </routers>
         <layout>
             <updates>
                 <newsman_newsletter>
