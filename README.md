@@ -54,4 +54,4 @@ The feature allows you to:
   
    ![Newsletter Popup Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assests/newsletter_popup_settings.png)
 
-  
+8.Our module is connected to Newsman's notification system for event types like bounces, spam or unsubscriptions. When the event is triggered, Newsman will do a POST and sent the information at **http://www.yourdomain.com/newsman/webhook**.
