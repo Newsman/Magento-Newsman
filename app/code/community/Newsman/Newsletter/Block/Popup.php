@@ -42,7 +42,9 @@ class Newsman_Newsletter_Block_Popup extends Mage_Core_Block_Template
 
     public function getDisplayCookie()
     {
-        return self::NEWSLETTER_POPUP_DISPLAY_COOKIE;
+        $storeId = Mage::app()->getStore()->getId();
+        $displayCookie = self::NEWSLETTER_POPUP_DISPLAY_COOKIE . '_' . $storeId;
+        return $displayCookie;
     }
 
     public function getDisplayCookieValue()

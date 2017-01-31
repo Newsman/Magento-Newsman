@@ -21,49 +21,60 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
     public function insertTasks()
     {
-        $mappedValues = Mage::helper('newsman_newsletter')->getSegments();
-        if (!$mappedValues) {
-            $subscriberCollection = $this->getSubscriberCollection();
-            $this->_insertTasks($subscriberCollection, '_insertSubscriberTask');
+        $stores = Mage::app()->getStores();
+        foreach ($stores as $storeId => $store)
+        {
+            Mage::app()->getLocale()->emulate($storeId);
+            Mage::app()->setCurrentStore($storeId);
 
-            $customerCollection = $this->getCustomerCollection();
-            $this->_insertTasks($customerCollection, '_insertCustomerTask');
+            $mappedValues = Mage::helper('newsman_newsletter')->getSegments();
+            if (!$mappedValues) {
+                $subscriberCollection = $this->getSubscriberCollection();
+                $this->_insertTasks($subscriberCollection, '_insertSubscriberTask');
 
-            return $this;
-        }
+                $customerCollection = $this->getCustomerCollection();
+                $this->_insertTasks($customerCollection, '_insertCustomerTask');
 
-        $hasNonLoggedInIdGroup = false;
-        foreach ($mappedValues as $mappedValue) {
-            $insertMethod = '_insertCustomerTask';
-            if ($mappedValue['customer_group_id'] == Mage_Customer_Model_Group::NOT_LOGGED_IN_ID) {
-                $hasNonLoggedInIdGroup = true;
-                $insertMethod = '_insertSubscriberTask';
-                $collection = $this->getSubscriberCollection();
-            } elseif ($mappedValue['customer_group_id'] == Mage_Customer_Model_Group::CUST_GROUP_ALL) {
-                $collection = $this->getCustomerCollection();
-            } else {
-                $collection = $this->getCustomerCollection();
-                $collection->addFieldToFilter('group_id', array('eq' => $mappedValue['customer_group_id']));
+                return $this;
             }
-            $this->_insertTasks($collection, $insertMethod, $mappedValue['customer_group_id'], $mappedValue['segment']);
+
+            $hasNonLoggedInIdGroup = false;
+            foreach ($mappedValues as $mappedValue) {
+                $insertMethod = '_insertCustomerTask';
+                if ($mappedValue['customer_group_id'] == Mage_Customer_Model_Group::NOT_LOGGED_IN_ID) {
+                    $hasNonLoggedInIdGroup = true;
+                    $insertMethod = '_insertSubscriberTask';
+                    $collection = $this->getSubscriberCollection();
+                } elseif ($mappedValue['customer_group_id'] == Mage_Customer_Model_Group::CUST_GROUP_ALL) {
+                    $collection = $this->getCustomerCollection();
+                } else {
+                    $collection = $this->getCustomerCollection();
+                    $collection->addFieldToFilter('group_id', array('eq' => $mappedValue['customer_group_id']));
+                }
+                $this->_insertTasks($collection, $insertMethod, $mappedValue['customer_group_id'], $mappedValue['segment']);
+            }
+
+            if (!$hasNonLoggedInIdGroup) {
+                $collection = $this->getSubscriberCollection();
+                $this->_insertTasks($collection, '_insertSubscriberTask');
+            }
+            Mage::app()->getLocale()->revert();
         }
 
-        if (!$hasNonLoggedInIdGroup) {
-            $collection = $this->getSubscriberCollection();
-            $this->_insertTasks($collection, '_insertSubscriberTask');
-        }
         return $this;
     }
 
     public function getSubscriberCollection()
     {
         return Mage::getModel('newsletter/subscriber')->getCollection()
+            ->addStoreFilter(Mage::app()->getStore()->getStoreId())
             ->useOnlyNonCustomers();
     }
 
     public function getCustomerCollection()
     {
-        return Mage::getModel('customer/customer')->getCollection();
+        return Mage::getModel('customer/customer')->getCollection()
+            ->addFieldToFilter('store_id', Mage::app()->getStore()->getStoreId());
     }
 
     protected function _insertTasks($collection, $insertMethod, $groupId = null, $segment = null)
@@ -76,7 +87,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
             $data = array(
                 'customer_group_id' => $groupId,
                 'segment' => $segment,
-                'page' => $page
+                'page' => $page,
+                'store_id' => Mage::app()->getStore()->getStoreId()
             );
             $this->$insertMethod($data);
         }

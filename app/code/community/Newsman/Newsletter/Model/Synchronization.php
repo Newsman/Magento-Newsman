@@ -23,21 +23,21 @@ class Newsman_Newsletter_Model_Synchronization
         return $this->_listId;
     }
 
-    public function subscribersSync($page, $segment = null)
+    public function subscribersSync($page, $segment = null, $storeId = null)
     {
-        $collection = $this->getSubscribersOnly();
-        return $this->_import($collection, $page, $segment);
+        $collection = $this->getSubscribersOnly($storeId);
+        return $this->_import($collection, $page, $segment, $storeId);
     }
 
-    public function customersSync($pages, $customerGroupId = null, $segment = null)
+    public function customersSync($pages, $customerGroupId = null, $segment = null, $storeId = null)
     {
-        $collection = $this->getCustomersByGroup($customerGroupId);
-        return $this->_import($collection, $pages, $segment);
+        $collection = $this->getCustomersByGroup($customerGroupId, $storeId);
+        return $this->_import($collection, $pages, $segment, $storeId);
     }
 
-    protected function _import($collection, $page, $segment)
+    protected function _import($collection, $page, $segment, $storeId)
     {
-        $listId = Mage::helper('newsman_newsletter')->getListId();
+        $listId = Mage::helper('newsman_newsletter')->getListId($storeId);
         $batchSize = Mage::helper('newsman_newsletter')->getCustomerBatchSize();
         $subscriberCollection = $collection->setPageSize($batchSize)
             ->setCurPage($page);
@@ -77,22 +77,31 @@ class Newsman_Newsletter_Model_Synchronization
         return $csv;
     }
 
-    public function getSubscribersOnly()
+    public function getSubscribersOnly($storeId)
     {
         $collection = Mage::getModel('newsletter/subscriber')->getCollection()
             ->showAdditionalCustomerInfo()
             ->useOnlyNonCustomers();
 
+        if ($storeId) {
+            $collection->addStoreFilter($storeId);
+        }
+
         return $collection;
     }
 
-    public function getCustomersByGroup($groupId)
+    public function getCustomersByGroup($groupId, $storeId)
     {
         $collection = Mage::getModel('customer/customer')->getCollection()
             ->addNameToSelect();
         if ($groupId && $groupId != Mage_Customer_Model_Group::CUST_GROUP_ALL) {
             $collection->addFieldToFilter('group_id', array('eq' => $groupId));
         }
+
+        if ($storeId) {
+            $collection->addFieldToFilter('store_id', array('eq' => $storeId));
+        }
+
         return $collection;
     }
 }

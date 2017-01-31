@@ -16,8 +16,9 @@ class Newsman_Newsletter_Model_Adminhtml_System_Config_Source_List
     public function toOptionArray()
     {
         try {
+            $storeId = Mage::helper('newsman_newsletter')->getScopeStoreId();
             $lists = Mage::getModel('newsman_newsletter/api_list')
-                ->getAll();
+                ->getAll($storeId);
 
         } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());

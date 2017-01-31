@@ -35,7 +35,7 @@ class Newsman_Newsletter_Model_Queue
                     Mage::log('[Newsman] - Syncing Customers');
                     echo '[Newsman] - Syncing Customers' . PHP_EOL;
                 }
-                $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->customersSync($data['page'], $data['customer_group_id'], $data['segment']);
+                $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->customersSync($data['page'], $data['customer_group_id'], $data['segment'], $data['store_id']);
             }
 
             if ($task->getEntity() == 'subscriber') {
@@ -43,7 +43,7 @@ class Newsman_Newsletter_Model_Queue
                     Mage::log('[Newsman] - Syncing Subscribers');
                     echo '[Newsman] - Syncing Subscribers';
                 }
-                $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->subscribersSync($data['page'], $data['segment']);
+                $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->subscribersSync($data['page'], $data['segment'], $data['store_id']);
             }
             if ($syncStatus) {
                 $task->setProcessed();

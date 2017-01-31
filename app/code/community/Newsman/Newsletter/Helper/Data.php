@@ -124,4 +124,35 @@ class Newsman_Newsletter_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return (int)Mage::getStoreConfig(self::XML_PATH_NEWSMAN_IMPORT_QUEUE_BATCH_SIZE, $store);
     }
+
+    public function getStoreScope()
+    {
+        $store = null;
+        $configDataModel = Mage::getSingleton('adminhtml/config_data');
+
+        $storeCode = $configDataModel->getStore();
+        if ($storeCode) {
+            $store = Mage::getModel('core/store')->load($storeCode);
+            return $store;
+        }
+
+        $websiteCode = Mage::getSingleton('adminhtml/config_data')->getWebsite();
+        if ($websiteCode) {
+            $website = Mage::getModel('core/website')->load($websiteCode);
+            $store = $website->getDefaultStore();
+            return $store;
+        }
+
+        return $store;
+    }
+
+    public function getScopeStoreId()
+    {
+        $store = $this->getStoreScope();
+        if ($store && $store->getId()) {
+            return $store->getId();
+        }
+
+        return null;
+    }
 }

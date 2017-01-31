@@ -8,13 +8,13 @@ class Newsman_Newsletter_Model_Api_Newsman
 {
     protected $_client;
 
-    public function getClient()
+    public function getClient($storeId = null)
     {
         if (!$this->_client) {
             /** @var Newsman_Newsletter_Helper_Data $helper */
             $helper = Mage::helper('newsman_newsletter');
-            $userId = $helper->getUserId();
-            $apiKey = $helper->getApiKey();
+            $userId = $helper->getUserId($storeId);
+            $apiKey = $helper->getApiKey($storeId);
 
             try {
                 $this->_client = new Newsman_Client($userId, $apiKey);

@@ -9,13 +9,14 @@ class Newsman_Newsletter_Model_Api_List extends Newsman_Newsletter_Model_Api_New
     /**
      * Retrieve all the lists
      *
-     * @throws Exception
+     * @param null $storeId
+     * @return array
      */
-    public function getAll()
+    public function getAll($storeId = null)
     {
         $lists = array();
         try {
-            $lists = $this->getClient()->list->all();
+            $lists = $this->getClient($storeId)->list->all();
 
             if (!is_array($lists)) {
                 Mage::throwException(Mage::helper('newsman_newsletter')->__('Error on method list.all'));

@@ -1,5 +1,5 @@
 <?php
-/** @var $this Newsman_Newsletter_Block_Popup */
+/** @var $this JoyJoy_Newsletter_Block_Subscribe_Popup */
 ?>
 <div style="display: none">
     <div id="newsletter-popup">
@@ -24,8 +24,9 @@
     });
 
     function update() {
+        var isEnabled = <?php echo $this->isEnabled() ?>;
         var cookieCheck = Mage.Cookies.get('<?php echo $this->getDisplayCookie() ?>');
-        if (cookieCheck == null && jQuery(window).width() >= <?php echo $this->getWindowResolution() ?>) {
+        if (isEnabled && cookieCheck == null && jQuery(window).width() >= <?php echo $this->getWindowResolution() ?>) {
             beginNewsletterForm();
         }
     }
