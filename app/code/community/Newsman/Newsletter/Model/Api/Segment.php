@@ -11,11 +11,11 @@ class Newsman_Newsletter_Model_Api_Segment extends Newsman_Newsletter_Model_Api_
      * @return mixed
      * @throws Exception
      */
-    public function getAll($listId)
+    public function getAll($listId, $storeId = null)
     {
         $segments = array();
         try {
-            $segments = $this->getClient()->segment->all($listId);
+            $segments = $this->getClient($storeId)->segment->all($listId);
 
             if (!is_array($segments)) {
                 throw new Exception(Mage::helper('newsman_newsletter')->__('Error on method segment.clear'));
