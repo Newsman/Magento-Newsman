@@ -27,6 +27,9 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
             Mage::app()->getLocale()->emulate($storeId);
             Mage::app()->setCurrentStore($storeId);
 
+            if (!Mage::helper('newsman_newsletter')->isEnabled()) {
+                return $this;
+            }
             $mappedValues = Mage::helper('newsman_newsletter')->getSegments();
             if (!$mappedValues) {
                 $subscriberCollection = $this->getSubscriberCollection();

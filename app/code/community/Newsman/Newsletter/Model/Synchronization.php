@@ -48,7 +48,7 @@ class Newsman_Newsletter_Model_Synchronization
         if ($segment) {
             $segments = array($segment);
         }
-        $importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segments, $csvData);
+        $importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segments, $csvData, $storeId);
 
         return $importResult;
     }
