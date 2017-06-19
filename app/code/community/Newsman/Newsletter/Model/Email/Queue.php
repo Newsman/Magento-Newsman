@@ -40,6 +40,17 @@ class Newsman_Newsletter_Model_Email_Queue extends Mage_Core_Model_Email_Queue
                 if ($parameters->getReturnPathEmail() !== null) {
                     $mailTransport = new Zend_Mail_Transport_Sendmail("-f" . $parameters->getReturnPathEmail());
                     Zend_Mail::setDefaultTransport($mailTransport);
+                } else {
+                    $config = array(
+                        'ssl' => $_helper->getSslType(),
+                        'port' => $_helper->getPort(),
+                        'auth' => $_helper->getAuth(),
+                        'username' => $_helper->getUsername(),
+                        'password' => $_helper->getPassword()
+                    );
+
+                    $mailTransport = new Zend_Mail_Transport_Smtp($_helper->getHost(), $config);
+                    Zend_Mail::setDefaultTransport($mailTransport);
                 }
 
                 $mailer = new Zend_Mail('utf-8');
