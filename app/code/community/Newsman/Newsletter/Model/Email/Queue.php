@@ -44,7 +44,7 @@ class Newsman_Newsletter_Model_Email_Queue extends Mage_Core_Model_Email_Queue
                     $config = array(
                         'ssl' => $_helper->getSslType(),
                         'port' => $_helper->getPort(),
-                        'auth' => $_helper->getAuth(),
+                        'auth' => strtolower($_helper->getAuth()),
                         'username' => $_helper->getUsername(),
                         'password' => $_helper->getPassword()
                     );
