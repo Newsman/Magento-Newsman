@@ -71,6 +71,7 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
     {
         return Mage::getModel('newsletter/subscriber')->getCollection()
             ->addStoreFilter(Mage::app()->getStore()->getStoreId())
+            ->addFieldToFilter('subscriber_status', 1)
             ->useOnlyNonCustomers();
     }
 

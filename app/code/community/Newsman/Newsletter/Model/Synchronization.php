@@ -80,6 +80,7 @@ class Newsman_Newsletter_Model_Synchronization
     public function getSubscribersOnly($storeId)
     {
         $collection = Mage::getModel('newsletter/subscriber')->getCollection()
+            ->addFieldToFilter('subscriber_status', 1)
             ->showAdditionalCustomerInfo()
             ->useOnlyNonCustomers();
 
