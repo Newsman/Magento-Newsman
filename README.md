@@ -18,7 +18,7 @@ Installation
 	
 ## Magento Connect installation:
 In your Magento admin panel, go to **System > Magento Connect > Magento Connect Manager** and follow the usual installation flow.
-For **Direct package file upload** use [Newsman-3.0.0.tgz](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/Newsman-3.0.0.tgz).
+For **Direct package file upload** use [Newsman-3.0.1.tgz](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/Newsman-3.0.1.tgz).
 	
 ## Configuration
 1. Go to **System > Configuration > Newsman > 
