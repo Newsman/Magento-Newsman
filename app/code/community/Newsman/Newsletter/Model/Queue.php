@@ -27,13 +27,13 @@ class Newsman_Newsletter_Model_Queue
         foreach ($taskCollection as $task) {
             if (Newsman_Newsletter_Helper_Debug::isEnabled()) {
                 Mage::log('[Newsman] Task #' . $task->getId());
-                echo "[Newsman] Task #{$task->getId()}" . PHP_EOL;
+                print "[Newsman] Task #{$task->getId()}" . PHP_EOL;
             }
             $data = unserialize($task->getInfo());
             if ($task->getEntity() == 'customer') {
                 if (Newsman_Newsletter_Helper_Debug::isEnabled()) {
                     Mage::log('[Newsman] - Syncing Customers');
-                    echo '[Newsman] - Syncing Customers' . PHP_EOL;
+                    print '[Newsman] - Syncing Customers' . PHP_EOL;
                 }
                 $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->customersSync($data['page'], $data['customer_group_id'], $data['segment'], $data['store_id']);
             }
@@ -41,7 +41,7 @@ class Newsman_Newsletter_Model_Queue
             if ($task->getEntity() == 'subscriber') {
                 if (Newsman_Newsletter_Helper_Debug::isEnabled()) {
                     Mage::log('[Newsman] - Syncing Subscribers');
-                    echo '[Newsman] - Syncing Subscribers';
+                    print '[Newsman] - Syncing Subscribers';
                 }
                 $syncStatus = Mage::getModel('newsman_newsletter/synchronization')->subscribersSync($data['page'], $data['segment'], $data['store_id']);
             }
@@ -58,7 +58,7 @@ class Newsman_Newsletter_Model_Queue
 
         if (Newsman_Newsletter_Helper_Debug::isEnabled()) {
             Mage::log("[Newsman] - {$processedTasks} tasks were processed.");
-            echo "[Newsman] - {$processedTasks} tasks were processed." . PHP_EOL;
+            print "[Newsman] - {$processedTasks} tasks were processed." . PHP_EOL;
         }
 
         if (Mage::helper('newsman_newsletter')->isSubscribersSynchronizationEnabled() && $this->getTotalFailedTasks()) {
@@ -106,7 +106,7 @@ class Newsman_Newsletter_Model_Queue
 
         if (Newsman_Newsletter_Helper_Debug::isEnabled()) {
             Mage::log("[Newsman] - {$cleared} failed tasks were cleared.");
-            echo "[Newsman] - {$cleared} failed tasks were cleared." . PHP_EOL;
+            print "[Newsman] - {$cleared} failed tasks were cleared." . PHP_EOL;
         }
         return $cleared;
     }

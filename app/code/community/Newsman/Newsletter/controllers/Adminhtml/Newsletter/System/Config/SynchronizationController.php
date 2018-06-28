@@ -24,4 +24,14 @@ class Newsman_Newsletter_Adminhtml_Newsletter_System_Config_SynchronizationContr
         }
         $this->getResponse()->setBody((int)$isSynced);
     }
+
+    /**
+     * Check is allowed access to action
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('system/config/newsman_newsletter');
+    }
 }
