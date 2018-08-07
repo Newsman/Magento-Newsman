@@ -22,6 +22,7 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 	public function insertTasks()
 	{
+		$max = 9999;
 		$batchSize = Mage::helper('newsman_newsletter')->getCustomerBatchSize();
 
 		$customerEmail[] = "";
@@ -71,13 +72,16 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					$csvData .= "newsletterSubscribers";
 					$csvData .= PHP_EOL;
 
-					if ($int == $batchSize)
+					if ($int == $max)
 					{
-						$int = 0;
+						$max += 9999;
 
 						$csv = utf8_encode($csvData);
 
 						$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, null, $csvData, $storeId);
+
+						//start from scratch
+						$csvData = "email,subscriber_status,magento_source" . PHP_EOL;
 					}
 				}
 
@@ -97,6 +101,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$customerEmail[] = $_order->getCustomerEmail();
 					}
 
+					$max = 9999;
+
 					$csvData = "email, customerId, magento_source" . PHP_EOL;
 					for ($int = 0; $int < count($customerEmail); ++$int)
 					{
@@ -107,13 +113,15 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$csvData .= "orderCustomer";
 						$csvData .= PHP_EOL;
 
-						if ($int == $batchSize)
+						if ($int == $max)
 						{
-							$int = 0;
+							$max += 9999;
 
 							$csv = utf8_encode($csvData);
 
 							$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, null, $csv, $storeId);
+
+							$csvData = "email, customerId, magento_source" . PHP_EOL;
 						}
 
 					}
@@ -153,6 +161,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$subscriberStatus[] = $sub["subscriber_status"];
 					}
 
+					$max = 9999;
+
 					$csvData = "email,subscriber_status,magento_source" . PHP_EOL;
 					for ($int = 1; $int < count($subscriberEmail); ++$int)
 					{
@@ -163,13 +173,15 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$csvData .= "newsletterSubscribers";
 						$csvData .= PHP_EOL;
 
-						if ($int == $batchSize)
+						if ($int == $max)
 						{
-							$int = 0;
+							$max += 9999;
 
 							$csv = utf8_encode($csvData);
 
 							$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segment, $csvData, $storeId);
+
+							$csvData = "email,subscriber_status,magento_source" . PHP_EOL;
 						}
 					}
 
@@ -187,6 +199,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 							$customerEmail[] = $_order->getCustomerEmail();
 						}
 
+						$max = 9999;
+
 						$csvData = "email, customerId, magento_source" . PHP_EOL;
 						for ($int = 1; $int < count($customerEmail); ++$int)
 						{
@@ -197,11 +211,13 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 							$csvData .= "orderCustomer";
 							$csvData .= PHP_EOL;
 
-							if ($int == $batchSize)
+							if ($int == $max)
 							{
-								$int = 0;
+								$max += 9999;
 
 								$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segment, $csvData, $storeId);
+
+								$csvData = "email, customerId, magento_source" . PHP_EOL;
 							}
 						}
 
@@ -250,6 +266,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					$segment = array();
 					$segment[] = $mappedValue["segment"];
 
+					$max = 9999;
+
 					$csvData = "email, customerId, magento_source" . PHP_EOL;
 					for ($int = 2; $int < count($tempCustomerEmail) + 2; $int++)
 					{
@@ -262,11 +280,13 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 							$csvData .= "orderCustomer";
 							$csvData .= PHP_EOL;
 
-							if ($int == $batchSize)
+							if ($int == $max)
 							{
-								$int = 0;
+								$max += 9999;
 
 								$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segment, $csvData, $storeId);
+
+								$csvData = "email, customerId, magento_source" . PHP_EOL;
 							}
 						}
 					}
@@ -275,13 +295,14 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 					$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segment, $csv, $storeId);
 
-
 					$subscriberCollection = $this->getSubscriberCollection();
 					foreach ($subscriberCollection as $sub)
 					{
 						$subscriberEmail[] = $sub["subscriber_email"];
 						$subscriberStatus[] = $sub["subscriber_status"];
 					}
+
+					$max = 9999;
 
 					$csvData = "email,subscriber_status,magento_source" . PHP_EOL;
 					for ($int = 1; $int < count($subscriberEmail); ++$int)
@@ -293,13 +314,15 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$csvData .= "newsletterSubscriber";
 						$csvData .= PHP_EOL;
 
-						if ($int == $batchSize)
+						if ($int == $max)
 						{
-							$int = 0;
+							$max += 9999;
 
 							$csv = utf8_encode($csvData);
 
 							$importResult = Mage::getModel('newsman_newsletter/api_import')->csv($listId, $segment, $csv, $storeId);
+
+							$csvData = "email,subscriber_status,magento_source" . PHP_EOL;
 						}
 					}
 					$csv = utf8_encode($csvData);
