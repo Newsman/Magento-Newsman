@@ -232,9 +232,18 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 					foreach ($collection as $col)
 					{
-						$customerEmail[] = $col->getData()["email"];
-						$customerId[] = $col->getData()["entity_id"];
-						$customerGroupId = $col->getData()["group_id"];
+						$tempEmail = $col->getData();
+						$tempEmail = $tempEmail["email"];
+
+						$customerEmail[] = $tempEmail;
+
+						$tempEntityId = $col->getData();
+						$tempEntityId = $tempEntityId["entity_id"];
+
+						$customerId[] = $tempEntityId;
+
+						$tempCustomerId = $col->getData();
+						$tempCustomerId = $tempCustomerId["group_id"];
 					}
 
 					$ordercollection = Mage::getModel('sales/order')->getCollection()
