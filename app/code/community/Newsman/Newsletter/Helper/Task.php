@@ -27,17 +27,19 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 	public function _importDataG(&$data, $list, $segments = null, $storeId)
 	{
-		$csv = '"email","customerId", "groupId","source"' . PHP_EOL;
+		$csv = '"email","customerId", "groupId","source", "firstname", "lastname"' . PHP_EOL;
 
 		$source = self::safeForCsv("magento customer");
 		foreach ($data as $_dat)
 		{
 			$csv .= sprintf(
-				"%s,%s,%s,%s",
+				"%s,%s,%s,%s,%s,%s",
 				self::safeForCsv($_dat["email"]),
 				self::safeForCsv($_dat["customerId"]),
 				self::safeForCsv($_dat["groupId"]),
-				$source
+				$source,
+				self::safeForCsv($_dat["firstname"]),
+				self::safeForCsv($_dat["lastname"])
 			);
 			$csv .= PHP_EOL;
 		}
@@ -189,6 +191,10 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					foreach ($collection as $col)
 					{
 						$tempEmail = $col->getData();
+
+						$firstname = $tempEmail["firstname"];
+						$lastname = $tempEmail["lastname"];
+
 						$tempEmail = $tempEmail["email"];
 
 						$customerEmail[] = $tempEmail;
@@ -204,7 +210,9 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$customers_to_import[] = array(
 							"email" => $tempEmail,
 							"customerId" => $tempEntityId,
-							"groupId" => $tempGroupId
+							"groupId" => $tempGroupId,
+							"firstname" => $firstname,
+							"lastname" => $lastname
 						);
 
 						if ((count($customers_to_import) % $batchSize) == 0)
@@ -292,6 +300,10 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						foreach ($collection as $col)
 						{
 							$tempEmail = $col->getData();
+
+							$firstname = $tempEmail["firstname"];
+							$lastname = $tempEmail["lastname"];
+
 							$tempEmail = $tempEmail["email"];
 
 							$customerEmail[] = $tempEmail;
@@ -307,7 +319,9 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 							$customers_to_import[] = array(
 								"email" => $tempEmail,
 								"customerId" => $tempEntityId,
-								"groupId" => $tempGroupId
+								"groupId" => $tempGroupId,
+								"firstname" => $firstname,
+								"lastname" => $lastname
 							);
 
 							if ((count($customers_to_import) % $batchSize) == 0)
@@ -372,6 +386,10 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					foreach ($collection as $col)
 					{
 						$tempEmail = $col->getData();
+
+						$firstname = $tempEmail["firstname"];
+						$lastname = $tempEmail["lastname"];
+
 						$tempEmail = $tempEmail["email"];
 
 						$customerEmail[] = $tempEmail;
@@ -387,7 +405,9 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						$customers_to_import[] = array(
 							"email" => $tempEmail,
 							"customerId" => $tempEntityId,
-							"groupId" => $tempGroupId
+							"groupId" => $tempGroupId,
+							"firstname" => $firstname,
+							"lastname" => $lastname
 						);
 
 						if ((count($customers_to_import) % $batchSize) == 0)
@@ -466,6 +486,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 		$storeId = Mage::app()->getStore()->getStoreId();
 
 		$collection = Mage::getModel('customer/customer')->getCollection()
+			->addAttributeToSelect('firstname')
+			->addAttributeToSelect('lastname')
 			->addFieldToFilter('store_id', $storeId);
 
 		return $collection;
