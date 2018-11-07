@@ -84,14 +84,13 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 	{
 		$csv = '"email","subscriber_status","source"' . PHP_EOL;
 
-		$source = self::safeForCsv("magento subscriber");
 		foreach ($data as $_dat)
 		{
 			$csv .= sprintf(
 				"%s,%s,%s",
 				self::safeForCsv($_dat["email"]),
 				self::safeForCsv($_dat["subscriber_status"]),
-				$source
+				self::safeForCsv($_dat["subscriber_type"])
 			);
 			$csv .= PHP_EOL;
 		}
@@ -150,9 +149,20 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 				foreach ($subscriberCollection as $sub)
 				{
+					$type = "newsletter subscriber ";
+
+					if($sub["customer_id"] == "0")
+					{
+						$type .= "visitor";
+					}
+					else{
+						$type .= "customer";
+					}
+
 					$customers_to_import[] = array(
 						"email" => $sub["subscriber_email"],
-						"subscriber_status" => $sub["subscriber_status"]
+						"subscriber_status" => $sub["subscriber_status"],
+						"subscriber_type" => $type
 					);
 
 					if ((count($customers_to_import) % $batchSize) == 0)
@@ -241,9 +251,20 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					$subscriberCollection = $this->getSubscriberCollection();
 					foreach ($subscriberCollection as $sub)
 					{
+						$type = "newsletter subscriber ";
+
+						if($sub["customer_id"] == "0")
+						{
+							$type .= "visitor";
+						}
+						else{
+							$type .= "customer";
+						}
+
 						$customers_to_import[] = array(
 							"email" => $sub["subscriber_email"],
-							"subscriber_status" => $sub["subscriber_status"]
+							"subscriber_status" => $sub["subscriber_status"],
+							"subscriber_type" => $type
 						);
 
 						if ((count($customers_to_import) % $batchSize) == 0)
@@ -390,9 +411,20 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					$subscriberCollection = $this->getSubscriberCollection();
 					foreach ($subscriberCollection as $sub)
 					{
+						$type = "newsletter subscriber ";
+
+						if($sub["customer_id"] == "0")
+						{
+							$type .= "visitor";
+						}
+						else{
+							$type .= "customer";
+						}
+
 						$customers_to_import[] = array(
 							"email" => $sub["subscriber_email"],
-							"subscriber_status" => $sub["subscriber_status"]
+							"subscriber_status" => $sub["subscriber_status"],
+							"subscriber_type" => $type
 						);
 
 						if ((count($customers_to_import) % $batchSize) == 0)
