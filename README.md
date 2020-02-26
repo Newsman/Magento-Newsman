@@ -15,6 +15,8 @@ Installation
 4. Copy the *"app/etc/modules/Newsman_Newsletter.xml"* to your "app/etc/modules/" shop directory.
 
 5. Copy the content of the *"app/locale"* directory to the same location in your application.
+
+6. Copy 'newsmanfetch.php' to your magento root directory.
 	
 ## Magento Connect installation:
 In your Magento admin panel, go to **System > Magento Connect > Magento Connect Manager** and follow the usual installation flow.
