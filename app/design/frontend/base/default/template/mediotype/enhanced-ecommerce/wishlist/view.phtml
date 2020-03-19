@@ -1,0 +1,73 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Dale Owen @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mage_Wishlist_Block_Customer_Wishlist
+ */
+$items = $this->getWishlistItems();
+?>
+<?php if($this->hasWishlistItems()): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        <?php $position = 0 ?>
+        <?php foreach($items as $item): ?>
+        <?php $product = Mage::getModel('catalog/product')->load($item->getData('product_id')); ?>
+        <?php
+            $impressionData = array(
+                "id" => $product->getId(),
+                "name" => $product->getName(),
+                "position" => ++$position,
+                "list" => 'Wishlist'
+                );
+            if($product->getManufacturer()){
+                $impressionData['brand'] =$product->getManufacturer();
+            }
+        ?>
+        ga('ec:addImpression', <?php echo json_encode($impressionData) ?>);
+        //add click analysis to the links
+        var links = $$('#wishlist-table tbody tr:nth-child(<?php echo $position ?>) a');
+        links.each(function(link){
+            if(!link.hasClassName('btn-remove')){
+                link.onclick = function() {
+                    <?php unset($impressionData["list"]) ?>
+                    ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+                    ga('ec:setAction', 'click',{list: 'Wishlist'});
+                    ga('send', 'event', 'UX', 'click', 'Wishlist',{
+                        'hitCallback': function() {
+                            document.location = link.href;
+                        }
+                    });
+                };
+            }
+        });
+        //add click analysis to add to cart
+        var button = $('wishlist-table').down('tbody tr', <?php echo $position - 1 ?>).down('.btn-cart');
+        button.originonclick = button.onclick;
+        button.onclick = function() {
+            <?php unset($impressionData["position"]) ?>
+            <?php $impressionData["price"] = $product->getPrice() ?>
+            <?php $impressionData["quantity"] = $item->getData('qty') ?>
+            ga('ec:addProduct', {
+                'id': '<?php echo $product->getId(); ?>',
+                'name': "<?php echo $product->getName(); ?>",
+                <?php if($product->getManufacturer()): ?>
+                'brand': "<?php echo $product->getManufacturer() ?>",
+                <?php endif; ?>
+                'price': '<?php echo $product->getPrice(); ?>',
+                'quantity': '<?php echo $item->getData('qty') ?>'
+            });
+            ga('ec:setAction', 'add');
+            button.onclick = button.originonclick;
+            ga('send', 'event', 'UX', 'click', 'add to cart',{
+                'hitCallback': function() {
+                    button.click(button.originonclick);
+                }
+            });
+        };
+
+        <?php endforeach; ?>
+        //]]>
+    </script>
+<?php endif; ?>

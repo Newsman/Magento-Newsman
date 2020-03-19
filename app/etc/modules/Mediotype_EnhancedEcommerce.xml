@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mediotype_EnhancedEcommerce>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mediotype_Core/>
+                <Mage_GoogleAnalytics/>
+            </depends>
+        </Mediotype_EnhancedEcommerce>
+    </modules>
+</config>

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <mediotype_ee translate="label" module="mediotype_ee">
+            <label>Newsman Remarketing Enhanced Ecommerce</label>
+            <tab>mediotype</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1005</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <mediotype_ee_settings translate="label" module="mediotype_ee">
+                    <label>Newsman Remarketing Enhanced Ecommerce Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <ee_enabled translate="label">
+                            <sort_order>0</sort_order>
+                            <label>Newsman Remarketing Enabled</label>
+                            <comment>
+                                <![CDATA[
+                                <div style="padding:10px;background-color:#fff;border:1px solid #ddd;margin-bottom:7px;">
+                                Get your remarketing id from <a href="https://www.newsman.app/" target="_blank">NewsMAN</a>.
+                                </div>
+                                  ]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </ee_enabled>
+                        <account_id>
+                            <label>Newsman Remarketing ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>required-entry</validate>
+                            <comment>Enter your Newsman Remarketing ID here</comment>
+                        </account_id>
+                    </fields>
+                </mediotype_ee_settings>
+            </groups>
+        </mediotype_ee>
+    </sections>
+</config>

@@ -1,0 +1,143 @@
+<?xml version="1.0" ?>
+<layout version="0.1.0">
+
+    <default>
+        <reference name="head">
+            <action method="unsetChild">
+                <name>google_analytics</name>
+            </action>
+            <block type="mediotype_ee/Page_BeforeBody"
+                   after="-"
+                   name="mediotype_google_enhanced_ecommerce_analytics"
+                   as="mediotype_google_enhanced_ecommerce_analytics"
+                   template="mediotype/enhanced-ecommerce/page/before-body.phtml"/>
+        </reference>
+
+        <reference name="after_body_start">
+            <action ifconfig="mediotype_ee/mediotype_ee_settings/ee_enabled" method="unsetChild">
+                <name>google_analytics</name>
+            </action>
+        </reference>
+
+        <reference name="before_body_end">
+            <block type="mediotype_ee/Page_AfterFooter"
+                   after="-"
+                   name="send-ga"
+                   as="send-ga"
+                   template="mediotype/enhanced-ecommerce/page/after-footer.phtml"/>
+        </reference>
+
+    </default>
+
+    <catalog_category_default>
+        <reference name="content">
+            <block type="mediotype_ee/catalog_product_list"
+                   name="enhanced_ecommerce_product_list"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list.phtml"
+                   after="-"/>
+        </reference>
+    </catalog_category_default>
+
+    <catalog_category_layered>
+        <reference name="content">
+            <block type="mediotype_ee/catalog_product_list"
+                   name="enhanced_ecommerce_product_list"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list.phtml"
+                   after="-"/>
+        </reference>
+    </catalog_category_layered>
+
+    <catalogsearch_result_index>
+        <reference name="content">
+            <block type="mediotype_ee/catalog_product_list"
+                   name="enhanced_ecommerce_product_list"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list.phtml"
+                   after="-"/>
+        </reference>
+    </catalogsearch_result_index>
+
+    <catalogsearch_advanced_result>
+        <reference name="content">
+            <block type="mediotype_ee/catalog_product_list"
+                   name="enhanced_ecommerce_product_list"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list.phtml"
+                   after="-"/>
+        </reference>
+    </catalogsearch_advanced_result>
+
+    <catalog_product_view>
+        <reference name="content">
+            <block type="mediotype_ee/catalog_product_view"
+                   name="enhanced_ecommerce_product_view"
+                   template="mediotype/enhanced-ecommerce/catalog/product/view.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/catalog_product_list_upsell"
+                   name="enhanced_ecommerce_upsell"
+                   after="-"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list/upsell.phtml"/>
+        </reference>
+        <reference name="right">
+            <block type="mediotype_ee/catalog_product_list_related"
+                   name="enhanced_ecommerce_related"
+                   after="-"
+                   template="mediotype/enhanced-ecommerce/catalog/product/list/related.phtml"/>
+        </reference>
+    </catalog_product_view>
+
+    <checkout_cart_index>
+        <reference name="content">
+            <block type="mediotype_ee/checkout_cart"
+                   name="enhanced_ecommerce_cart_remove"
+                   template="mediotype/enhanced-ecommerce/checkout/cart/remove.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/checkout_cart_crosssell"
+                   name="enhanced_ecommerce_cart_crosssell"
+                   template="mediotype/enhanced-ecommerce/checkout/cart/crosssell.phtml"
+                   after="-"/>
+        </reference>
+    </checkout_cart_index>
+
+    <checkout_onepage_index>
+        <reference name="content">
+            <block type="mediotype_ee/checkout_cart"
+                   name="enhanced_ecommerce_onepage"
+                   template="mediotype/enhanced-ecommerce/checkout/onepage.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/enhancedEcommerce"
+                   name="enhanced_ecommerce_onepage_billing"
+                   template="mediotype/enhanced-ecommerce/checkout/onepage/billing.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/enhancedEcommerce"
+                   name="enhanced_ecommerce_onepage_shipping"
+                   template="mediotype/enhanced-ecommerce/checkout/onepage/shipping.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/enhancedEcommerce"
+                   name="enhanced_ecommerce_onepage_shipping_method"
+                   template="mediotype/enhanced-ecommerce/checkout/onepage/shipping_method.phtml"
+                   after="-"/>
+            <block type="mediotype_ee/enhancedEcommerce"
+                   name="enhanced_ecommerce_onepage_payment"
+                   template="mediotype/enhanced-ecommerce/checkout/onepage/payment.phtml"
+                   after="-"/>
+        </reference>
+    </checkout_onepage_index>
+
+    <checkout_onepage_success>
+        <reference name="content">
+            <block type="mediotype_ee/checkout_afterSuccess"
+                   name="enhanced_ecommerce_onepage_success"
+                   template="mediotype/enhanced-ecommerce/checkout/after-success.phtml"
+                   after="-"/>
+        </reference>
+    </checkout_onepage_success>
+
+    <wishlist_index_index>
+        <reference name="content">
+            <block type="mediotype_ee/wishlist_customer_wishlist"
+                   name="enhanced_ecommerce_wishlist"
+                   template="mediotype/enhanced-ecommerce/wishlist/view.phtml"
+                   after="-"/>
+        </reference>
+    </wishlist_index_index>
+
+</layout>

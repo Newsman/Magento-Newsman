@@ -1,0 +1,59 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Dale Owen @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mage_Checkout_Block_Cart_Crosssell
+ */
+$items = $this->getItems();
+?>
+<?php if($this->getItemCount()): ?>
+    <!--<script type="text/javascript">
+        //<![CDATA[
+        <?php $position = 0 ?>
+        <?php foreach($items as $item): ?>
+        <?php
+            $impressionData = array(
+                "id" => $item->getId(),
+                "name" => $item->getName(),
+                "position" => ++$position,
+                "list" => "Cross Sell Products"
+                );
+        ?>
+        ga('ec:addImpression', <?php echo json_encode($impressionData) ?>);
+        //add click analysis to the links
+        var clinks = $$('#crosssell-products-list > li:nth-child(<?php echo $position ?>) a');
+        clinks.each(function(link){
+            link.onclick = function() {
+                <?php unset($impressionData["list"]) ?>
+                ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+                ga('ec:setAction', 'click',{list: 'Cross Sell Products'});
+                ga('send', 'event', 'UX', 'click', 'Cross Sell Products',{
+                    'hitCallback': function() {
+                        document.location = link.href;
+                    }
+                });
+            };
+        });
+        //add click analysis to add to cart
+        var cButton = $('crosssell-products-list').down('> li', <?php echo $position - 1 ?>).down('.btn-cart');
+        cButton.originonclick = cButton.onclick;
+        cButton.onclick = function() {
+            <?php unset($impressionData["position"]) ?>
+            <?php $impressionData["price"] = $item->getPrice() ?>
+            <?php $impressionData["quantity"] = 1 ?>
+            ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+            ga('ec:setAction', 'add');
+            cButton.onclick = cButton.originonclick;
+            ga('send', 'event', 'UX', 'click', 'add to cart',{
+                'hitCallback': function() {
+                    cButton.click(cButton.originonclick);
+                }
+            });
+        };
+
+        <?php endforeach; ?>
+        //]]>
+    </script>-->
+<?php endif; ?>

@@ -1,0 +1,62 @@
+<?php
+/**
+ *
+ * @author  R. Dale Owen   @mediotype
+ * @var $this Mage_Checkout_Block_Cart
+ */
+$loggedIn = Mage::getSingleton('customer/session')->isLoggedIn();
+?>
+<script type="text/javascript">
+    //<![CDATA[
+
+    <?php $newsman_id =  Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+
+
+    var endpoint = "https://retargeting.newsmanapp.com";
+    var _nzm = _nzm || [];
+    var _nzm_config = _nzm_config || [];
+    _nzm_tracking_server = endpoint;
+    (function () {
+        var a, methods, i;
+        a = function (f) {
+            return function () {
+                _nzm.push([f].concat(Array.prototype.slice.call(arguments, 0)));
+            }
+        };
+        methods = ['identify', 'track', 'run'];
+        for (i = 0; i < methods.length; i++) {
+            _nzm[methods[i]] = a(methods[i])
+        }
+        ;
+        s = document.getElementsByTagName('script')[0];
+        var script_dom = document.createElement('script');
+        script_dom.async = true;
+        script_dom.id = 'nzm-tracker';
+        script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
+        script_dom.src = endpoint + '/js/retargeting/track.js';
+        s.parentNode.insertBefore(script_dom, s);
+    })();
+
+    _nzm.run('require', 'ec');
+
+<?php foreach($this->getItems() as $item): ?>
+    <?php $product = $item->getProduct() ?>
+    <?php
+            $impressionData = array(
+                "id" => $product->getId(),
+                "name" => $product->getName(),
+                "price" => $item->getPrice(),
+                "quantity" => $item->getQty()
+                );
+            if($product->getManufacturer()){
+                $impressionData['brand'] =$product->getManufacturer();
+            }
+        ?>
+    _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+    _nzm.run('ec:setAction', 'checkout');
+    _nzm.run('send', 'pageview');
+
+<?php endforeach ?>
+
+    //]]>
+</script>

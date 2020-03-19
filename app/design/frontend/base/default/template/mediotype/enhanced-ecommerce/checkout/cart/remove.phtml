@@ -1,0 +1,180 @@
+<?php
+
+$items = $this->getItems();
+//var_dump($items);
+?>
+<?php if (count($items) >= 1): ?>
+	<script type="text/javascript">
+
+		<?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+
+
+        var endpoint = "https://bogdandev2.newsmanapp.com";
+        //var endpoint = "https://retargeting.newsmanapp.com";
+		var _nzm = _nzm || [];
+		var _nzm_config = _nzm_config || [];
+		_nzm_tracking_server = endpoint;
+		(function () {
+			var a, methods, i;
+			a = function (f) {
+				return function () {
+					_nzm.push([f].concat(Array.prototype.slice.call(arguments, 0)));
+				}
+			};
+			methods = ['identify', 'track', 'run'];
+			for (i = 0; i < methods.length; i++) {
+				_nzm[methods[i]] = a(methods[i])
+			}
+			;
+			s = document.getElementsByTagName('script')[0];
+			var script_dom = document.createElement('script');
+			script_dom.async = true;
+			script_dom.id = 'nzm-tracker';
+			script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
+			script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+			s.parentNode.insertBefore(script_dom, s);
+		})();
+
+		_nzm.run('require', 'ec');
+
+//remove
+		jQuery(document).ready(function () {
+
+			jQuery(".btn-remove").each(function () {
+				jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
+
+					var val = jQuery(this).parent().parent().find('.product-cart-actions').find('input').val();
+
+					var name = jQuery(this).parent().parent().find('.product-cart-actions').find('input').attr('name');
+
+					name = name.replace("cart[", "");
+					name = name.replace("][qty]", "");
+
+					var the_href = ev.data.elem.attr('href');
+
+					_nzm.run('ec:addProduct', {
+						'id': name,
+						'quantity': val
+					});
+
+					_nzm.run('ec:setAction', 'remove');
+
+					_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
+
+						_nzm.run('send', 'pageview');
+
+						document.location.href = the_href
+					}));
+
+					return false;
+				});
+			});
+
+//update
+			jQuery(".btn-update").each(function () {
+	jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
+
+		var val = jQuery(this).parent().parent().find('.product-cart-actions').find('input').val();
+
+		var name = jQuery(this).parent().parent().find('.product-cart-actions').find('input').attr('name');
+
+		name = name.replace("cart[", "");
+		name = name.replace("][qty]", "");
+
+		var the_href = ev.data.elem.attr('href');
+
+		_nzm.run('ec:addProduct', {
+			'id': name
+		});
+
+		_nzm.run('ec:setAction', 'remove');
+	
+		_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
+
+			_nzm.run('ec:addProduct', {
+			'id': name,
+			'quantity': val
+		});
+
+			_nzm.run('ec:setAction', 'add');
+
+			_nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {
+
+				_nzm.run('send', 'pageview');				
+
+			}));
+
+}));
+
+		//document.location.href = the_href
+		//return false;
+	});
+});
+
+		});
+
+		<?php $position = 1;?>
+
+		<?php foreach($items as $item): ?>
+
+		<?php $product = $item->getProduct() ?>
+				<?php
+		$impressionData = array(
+			"id" => $product->getId(),
+			"name" => $product->getName(),
+			"price" => $item->getPrice(),
+			"quantity" => $item->getQty(),
+			"list" => 'Cart',
+			"position" => $position
+		);
+		if ($product->getManufacturer())
+		{
+			//$impressionData['brand'] = $product->getManufacturer();
+		}
+		?>
+		_nzm.run('ec:addImpression', <?php echo json_encode($impressionData) ?>);
+
+		<?php $position++; ?>
+		<?php endforeach; ?>
+
+		_nzm.run('send', 'pageview');
+
+		document.observe('dom:loaded', function () {
+
+			//change the remove button's onclick for each item in the cart
+			<?php $position = 0 ?>
+			<?php foreach($items as $item): ?>
+			var rButton<?php echo $position ?> = $('shopping-cart-table').down('tbody').down('tr',<?php echo $position ?>).down('.btn-remove');
+
+			/*
+			 rButton<?php echo $position ?>.originalclick = rButton<?php echo $position ?>.onclick;
+			 rButton<?php echo $position ?>.onclick = function () {
+
+			<?php $product = $item->getProduct() ?>
+				<?php
+			$impressionData = array(
+				"id" => $product->getId(),
+				"name" => $product->getName(),
+				"price" => $item->getPrice(),
+				"quantity" => $item->getQty()
+			);
+			if ($product->getManufacturer())
+			{
+				$impressionData['brand'] = $product->getManufacturer();
+			}
+			?>
+			 _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+
+			 _nzm.run('ec:setAction', 'remove');
+			 _nzm.run('send', 'event', 'UX', 'click', 'remove from cart');
+
+			 rButton<?php echo $position ?>.click(rButton<?php echo $position ?>.originalclick);
+			 };
+			 */
+
+			<?php $position++; ?>
+			<?php endforeach; ?>
+		});
+
+	</script>
+<?php endif; ?>

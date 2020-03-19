@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <mediotype>
+                        <title>Newsman Marketing</title>
+                    </mediotype>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <mediotype_general>
+                                        <title>Newsman Marketing General</title>
+                                    </mediotype_general>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

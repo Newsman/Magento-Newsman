@@ -5,7 +5,7 @@
 This is the easiest way to connect your Shop with [Newsman](https://www.newsmanapp.com). Generate an API KEY in your [Newsman](https://www.newsmanapp.com) account, install this plugin and you will be able to sync your shop customers and newsletter subscribers with [Newsman](https://www.newsmanapp.com) list / segments.
 Installation
 
-## Manual installation: 
+## Installation: 
 1. Copy the *"app/code/community/Newsman"* directory from this repository to your "community" shop directory.
 
 2. Copy the *"lib/Newsman"* directory to your "lib/" shop directory.
@@ -17,11 +17,7 @@ Installation
 5. Copy the content of the *"app/locale"* directory to the same location in your application.
 
 6. Copy 'newsmanfetch.php' to your magento root directory.
-	
-## Magento Connect installation:
-In your Magento admin panel, go to **System > Magento Connect > Magento Connect Manager** and follow the usual installation flow.
-For **Direct package file upload** use [Newsman-3.0.1.tgz](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/Newsman-3.0.1.tgz).
-	
+		
 ## Configuration
 1. Go to **System > Configuration > Newsman > 
 Newsletter Subscriber Import > General Settings > Enable** and enable the module. Fill in your [Newsman](https://www.newsmanapp.com) API KEY and User ID and click the save button.
@@ -35,6 +31,16 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
   ![Data Mapping](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/data_mapping.png)
 
 4. Choose how often you want your lists to get uploaded to [Newsman](https://www.newsmanapp.com) You can also do a manual synchronization by clicking "Manual Sync".
+
+### Sync segmentation:
+
+Subscribers:
+
+email, subscriber_status, subscriber_type (customer or visitor)
+
+Customers:
+
+email, customerId, groupId, firstname, lastname, gender
 
   ![Synchronization Schedule](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/synchronization_schedule.png)
 

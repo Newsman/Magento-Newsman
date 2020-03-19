@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <mediotype translate="label" module="mediotype_core">
+            <label><![CDATA[<div>Newsman Remarketing</div>]]></label>
+            <class></class>
+            <sort_order>101</sort_order>
+        </mediotype>
+    </tabs>
+</config>

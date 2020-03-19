@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <mediotype_ee>
+                                        <title>Mediotype Google Enhanced Ecommerce</title>
+                                    </mediotype_ee>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,230 @@
+<?php
+/**
+ *
+ * @author  R. Dale Owen   @mediotype
+ * @var $this Mage_Catalog_Block_Product_List
+ */
+
+$productCollection = $this->getLoadedProductCollection();
+$helper = $this->helper('catalog/output');
+$current_category = Mage::registry('current_category');
+?>
+<?php if (!$productCollection->count()): ?>
+	<?php //no products were viewed ?>
+
+<script type="text/javascript">
+ <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+
+var endpoint = "https://bogdandev2.newsmanapp.com";
+//var endpoint = "https://retargeting.newsmanapp.com";
+
+var _nzm = _nzm || [];
+var _nzm_config = _nzm_config || [];
+_nzm_tracking_server = endpoint;
+(function () {
+	var a, methods, i;
+	a = function (f) {
+		return function () {
+			_nzm.push([f].concat(Array.prototype.slice.call(arguments, 0)));
+		}
+	};
+	methods = ['identify', 'track', 'run'];
+	for (i = 0; i < methods.length; i++) {
+		_nzm[methods[i]] = a(methods[i])
+	}
+	;
+	s = document.getElementsByTagName('script')[0];
+	var script_dom = document.createElement('script');
+	script_dom.async = true;
+	script_dom.id = 'nzm-tracker';
+	script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
+	script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+	s.parentNode.insertBefore(script_dom, s);
+})();
+
+_nzm.run('require', 'ec');
+</script>
+	
+<?php else: ?>
+	<?php //create impression objects for all the products ?>
+	<script type="text/javascript">
+
+		//<![CDATA[
+
+        <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+
+        var endpoint = "https://bogdandev2.newsmanapp.com";
+        //var endpoint = "https://retargeting.newsmanapp.com";
+
+		var _nzm = _nzm || [];
+		var _nzm_config = _nzm_config || [];
+		_nzm_tracking_server = endpoint;
+		(function () {
+			var a, methods, i;
+			a = function (f) {
+				return function () {
+					_nzm.push([f].concat(Array.prototype.slice.call(arguments, 0)));
+				}
+			};
+			methods = ['identify', 'track', 'run'];
+			for (i = 0; i < methods.length; i++) {
+				_nzm[methods[i]] = a(methods[i])
+			}
+			;
+			s = document.getElementsByTagName('script')[0];
+			var script_dom = document.createElement('script');
+			script_dom.async = true;
+			script_dom.id = 'nzm-tracker';
+            script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
+            script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+			s.parentNode.insertBefore(script_dom, s);
+		})();
+
+		_nzm.run('require', 'ec');
+
+		<?php $position = 0 ?>
+		<?php foreach ($productCollection as $product): ?>
+		<?php //create php standard class convert to json string ?>
+		<?php
+		$impressionData = array(
+			"id" => $product->getId(),
+			"name" => $product->getName(),
+			"position" => ++$position
+
+		);
+		if ($product->getManufacturer())
+		{
+			$impressionData['brand'] = $product->getManufacturer();
+		}
+		if (isset($current_category))
+		{
+			$impressionData['category'] = $current_category->getName();
+			$impressionData['list'] = "Category View";
+
+		} else
+		{
+			$impressionData['list'] = "Search Results";
+		}
+		?>
+
+		_nzm.run('ec:addImpression', <?php echo json_encode($impressionData)?>);
+		<?php endforeach; ?>
+
+		//create ga click event for clicking a product
+		//this assumes base magento list links
+		$$('.product-image, .product-name > a').each(function (item) {
+			item.onclick = function (e) {
+				var nearestLi = item.match('li') ? item : item.up('li');
+				var position = nearestLi.previousSiblings().size();
+
+				var nearestAnchor = nearestLi.down('a');
+				var name = Element.readAttribute(nearestAnchor, 'title');
+
+				var priceDiv = nearestLi.down('div.price-box');
+				var productId = '';
+				var prices = priceDiv.descendants();
+				prices.each(function (price) {
+					if (!price.hasClassName('price') && !price.hasClassName('regular-price')) {
+						//not a price, don't need to go further
+						return;
+					}
+					//grab the id of the element
+					var priceId = Element.readAttribute(price, 'id');
+					if (priceId == null) {
+						//didn't have an id to parse
+						return;
+					}
+
+					//now take the id and get the product id off it
+					var newProductId = (priceId.substr(14)) ? priceId.substr(14) : productId;
+					if (isNaN(newProductId)) {
+						//it's not a number so ignore it
+						return;
+					}
+					//now set the new product id
+					productId = newProductId;
+				});
+
+				var productFieldObject = {
+					'id': productId,                   // Product ID (string).
+					'name': name,
+					'quantity': 1,
+					<?php if(isset($current_category)): ?>
+					'category': '<?php echo $current_category->getName() ?>',
+					<?php endif; ?>
+					'position': position
+				};
+				_nzm.run('ec:addProduct', productFieldObject);
+				_nzm.run( 'ec:setAction', 'add' );
+				_nzm.run('send', 'event', 'UX', 'click', 'add to cart');
+			};
+		});
+
+		//create ga add event for adding to cart
+		$$('.btn-cart').each(function (item) {
+			item.originonclick = item.onclick;
+
+			// new click handler
+			item.onclick = function (elmn) {
+
+				elmn.preventDefault();
+
+				var nearestLi = item.match('li') ? item : item.up('li');
+				var position = nearestLi.previousSiblings().size();
+
+				var nearestAnchor = nearestLi.down('a');
+				var name = Element.readAttribute(nearestAnchor, 'title');
+
+				var priceDiv = nearestLi.down('div.price-box');
+				var productId = '';
+				var prices = priceDiv.descendants();
+				prices.each(function (price) {
+					if (!price.hasClassName('price') && !price.hasClassName('regular-price')) {
+						//not a price, don't need to go further
+						return;
+					}
+					//grab the id of the element
+					var priceId = Element.readAttribute(price, 'id');
+					if (priceId == null) {
+						//didn't have an id to parse
+						return;
+					}
+
+					//now take the id and get the product id off it
+					var newProductId = (priceId.substr(14)) ? priceId.substr(14) : productId;
+					if (isNaN(newProductId)) {
+						//it's not a number so ignore it
+						return;
+					}
+					//now set the new product id
+					productId = newProductId;
+				});
+
+
+				var productFieldObject = {
+					'id': productId,                   // Product ID (string).
+					'name': name,
+					'quantity': 1,
+					<?php if(isset($current_category)): ?>
+					'category': '<?php echo $current_category->getName() ?>',
+					<?php endif; ?>
+					'position': position
+				};
+				_nzm.run('ec:addProduct', productFieldObject);
+				_nzm.run( 'ec:setAction', 'add' );
+				item.onclick = item.originonclick;	
+
+				_nzm.run( 'send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function() {
+							
+					item.click();
+           
+         			   }) );
+
+			};
+
+		});
+
+		_nzm.run('send', 'pageview');
+		//]]>
+	</script>
+<?php endif; ?>

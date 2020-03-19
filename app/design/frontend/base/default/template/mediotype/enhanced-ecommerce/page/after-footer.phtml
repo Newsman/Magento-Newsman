@@ -1,0 +1,44 @@
+<?php
+/**
+ * Pushing pageview send to the bottom of the page so that any ecommerce data is captured at the same time
+ *
+ * @author  Joel Hart
+ */
+?>
+<script type="text/javascript">
+
+    jQuery(".remove").each(function () {
+        jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
+
+            var val = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
+      
+            //var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
+            var name = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
+
+            name = name.replace("cart[", "");
+            name = name.replace("][qty]", "");
+
+            var the_href = ev.data.elem.attr('href');
+
+            _nzm.run('ec:addProduct', {
+                'id': name,
+                'quantity': val
+            });
+
+            _nzm.run('ec:setAction', 'remove');
+
+            _nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
+
+                _nzm.run('send', 'pageview');     
+                
+                //document.location.href = the_href
+            }));
+
+            //return false;
+        });
+    });
+
+    //<![CDATA[
+    //_nzm.run('send', 'pageview');
+    //]]>
+</script>

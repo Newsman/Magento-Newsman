@@ -1,0 +1,54 @@
+<?php
+/**
+ * Sends complete order information to Google Analytics
+ *
+ * @author Joel Hart @mediotype
+ * @var $this Mediotype_EnhancedEcommerce_Block_Checkout_AfterSuccessMulti
+ */
+/** @var $order Mage_Sales_Model_Order */
+$orders  = $this->getOrders();
+?>
+
+<?php $o=0; foreach($orders as $order): ?>
+<?php $totals = $this->getTotals($order); ?>
+<script type="text/javascript">
+    <?php foreach($order->getItemsCollection() as $item): ?>
+    <?php /** @var $item Mage_Sales_Model_Order_Item */
+          /** @var $product Mage_Catalog_Model_Product */ ?>
+    <?php $product = Mage::getModel('catalog/product')->load($item->getProductId()); ?>
+    <?php
+        $impressionData = array(
+            "id" => $product->getId(),
+            "name" => $product->getName(),
+            "price" => $item->getPrice(),
+            "quantity" => $item->getQtyOrdered()
+            );
+        if($product->getManufacturer()){
+            $impressionData['brand'] =$product->getManufacturer();
+        }
+        if($order->getDiscountDescription()){
+            $impressionData['coupon'] =$order->getDiscountDescription();
+        }
+    ?>
+    ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+    <?php endforeach; ?>
+    <?php
+        $actionData = array(
+            "id" => $order->getIncrementId(),
+            "affiliation" => Mage::app()->getStore()->getName(),
+            "revenue" => $totals->getAmount(),
+            "tax" => $totals->getTax(),
+            "shipping" => $totals->getShipping()
+            );
+        if($order->getDiscountDescription()){
+            $actionData['coupon'] =$order->getDiscountDescription();
+        }
+    ?>
+
+    ga('ec:setAction', 'purchase', <?php echo json_encode($actionData) ?>);
+    ga('send', 'event', 'Ecommerce', 'Purchase', '<?php echo $totals->getAmount(); ?>');
+
+
+</script>
+<?php $o++; endforeach; ?>
+
