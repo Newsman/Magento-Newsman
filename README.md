@@ -34,13 +34,8 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
 
 ### Sync segmentation:
 
-Subscribers:
-
-email, subscriber_status, subscriber_type (customer or visitor)
-
-Customers:
-
-email, customerId, groupId, firstname, lastname, gender
+- Subscribers: email, subscriber_status, source (customer or visitor)
+- Customers: email, customerId, groupId, firstname, lastname, source
 
   ![Synchronization Schedule](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/synchronization_schedule.png)
 
