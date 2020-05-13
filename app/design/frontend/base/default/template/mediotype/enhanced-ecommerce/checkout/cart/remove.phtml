@@ -37,8 +37,20 @@ $items = $this->getItems();
 
 		_nzm.run('require', 'ec');
 
-//remove
+		//remove	
 		jQuery(document).ready(function () {
+			 
+			var idQty = [];
+
+			jQuery(".product-cart-actions .qty").each(function(){
+
+				var _name = jQuery(this).attr("name");
+				_name = _name.replace("cart[", "");
+				_name = _name.replace("][qty]", "");
+
+				idQty.push({ "id" : _name, "quantity": jQuery(this).val() });
+
+			});		
 
 			jQuery(".btn-remove").each(function () {
 				jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
@@ -48,21 +60,17 @@ $items = $this->getItems();
 					var name = jQuery(this).parent().parent().find('.product-cart-actions').find('input').attr('name');
 
 					name = name.replace("cart[", "");
-					name = name.replace("][qty]", "");
+					name = name.replace("][qty]", "");					
 
 					var the_href = ev.data.elem.attr('href');
 
 					_nzm.run('ec:addProduct', {
-						'id': name,
-						'quantity': val
+						'id': name,						
 					});
 
 					_nzm.run('ec:setAction', 'remove');
 
-					_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
-
-						_nzm.run('send', 'pageview');
-
+					_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {				
 						document.location.href = the_href
 					}));
 
@@ -70,8 +78,8 @@ $items = $this->getItems();
 				});
 			});
 
-//update
-			jQuery(".btn-update").each(function () {
+	//update
+	jQuery(".btn-update").each(function () {
 	jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
 
 		var val = jQuery(this).parent().parent().find('.product-cart-actions').find('input').val();
@@ -83,8 +91,20 @@ $items = $this->getItems();
 
 		var the_href = ev.data.elem.attr('href');
 
+					var oldName = "";
+					var oldQty = "";
+
+					idQty.each(function(item){
+   						if(item.id === name)
+						   {
+							   oldName = item.id;
+							   oldQty = item.quantity;
+						   }
+					});		
+
 		_nzm.run('ec:addProduct', {
-			'id': name
+			'id': name,		
+			'quantity': oldQty,
 		});
 
 		_nzm.run('ec:setAction', 'remove');
@@ -98,9 +118,7 @@ $items = $this->getItems();
 
 			_nzm.run('ec:setAction', 'add');
 
-			_nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {
-
-				_nzm.run('send', 'pageview');				
+			_nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {			
 
 			}));
 

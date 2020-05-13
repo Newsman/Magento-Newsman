@@ -112,6 +112,7 @@ _nzm.run('require', 'ec');
 
 		//create ga click event for clicking a product
 		//this assumes base magento list links
+		/*
 		$$('.product-image, .product-name > a').each(function (item) {
 			item.onclick = function (e) {
 				var nearestLi = item.match('li') ? item : item.up('li');
@@ -159,6 +160,7 @@ _nzm.run('require', 'ec');
 				_nzm.run('send', 'event', 'UX', 'click', 'add to cart');
 			};
 		});
+		*/
 
 		//create ga add event for adding to cart
 		$$('.btn-cart').each(function (item) {

@@ -7,6 +7,7 @@
 ?>
 <script type="text/javascript">
 
+    //remove
     jQuery(".remove").each(function () {
         jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
 
@@ -28,8 +29,8 @@
             _nzm.run('ec:setAction', 'remove');
 
             _nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
-
-                _nzm.run('send', 'pageview');     
+               
+                //_nzm.run('send', 'pageview');     
                 
                 //document.location.href = the_href
             }));
@@ -37,6 +38,100 @@
             //return false;
         });
     });
+
+    var _idQty = [];
+
+    jQuery(document).ready(function () {			           
+
+    //update
+    function refreshQtyButton(){
+
+        jQuery(".btn-edit").each(function(){
+ 
+        _idQty = [];
+
+        var arrVal = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
+
+        //var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
+        var arrName = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
+
+        arrName = arrName.replace("cart[", "");
+        arrName = arrName.replace("][qty]", "");
+
+        _idQty.push({
+        "id" : arrName,
+        "quantity": arrVal 
+        });
+
+        });	
+
+        jQuery(".quantity-button").each(function () {
+        jQuery(this).on("click", {"elem": jQuery(this)}, function (ev) {
+
+            //remove
+
+            //var val = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
+            
+            //var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
+            //var name = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
+
+            //name = name.replace("cart[", "");
+            //name = name.replace("][qty]", "");
+
+            var name = jQuery(this).attr('data-item-id');
+
+            var val = jQuery("#qinput-" + name).val();
+
+            var the_href = ev.data.elem.attr('href');
+
+                    var oldName = "";
+					var oldQty = "";
+
+					_idQty.each(function(item){
+   						if(item.id === name)
+						   {
+							   oldName = item.id;
+							   oldQty = item.quantity;
+						   }
+					});		
+
+            _nzm.run('ec:addProduct', {
+                'id': name,
+                'quantity': oldQty
+            });
+
+            _nzm.run('ec:setAction', 'remove');
+
+            _nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
+               
+                //update
+
+                //_nzm.run('send', 'pageview');     
+                
+                //document.location.href = the_href
+
+            _nzm.run('ec:addProduct', {
+			'id': name,
+			'quantity': val
+	    	});
+
+			_nzm.run('ec:setAction', 'add');
+
+			_nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {			 
+                refreshQtyButton();   
+			}));                
+
+                //update
+            }));
+
+            //return false;
+        });
+    });
+    }
+
+    refreshQtyButton();
+
+});
 
     //<![CDATA[
     //_nzm.run('send', 'pageview');

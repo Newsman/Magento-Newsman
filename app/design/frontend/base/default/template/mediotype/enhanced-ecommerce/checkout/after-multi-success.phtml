@@ -6,8 +6,11 @@
  * @var $this Mediotype_EnhancedEcommerce_Block_Checkout_AfterSuccessMulti
  */
 /** @var $order Mage_Sales_Model_Order */
+
 $orders  = $this->getOrders();
 ?>
+
+<!--
 
 <?php $o=0; foreach($orders as $order): ?>
 <?php $totals = $this->getTotals($order); ?>
@@ -52,3 +55,4 @@ $orders  = $this->getOrders();
 </script>
 <?php $o++; endforeach; ?>
 
+-->

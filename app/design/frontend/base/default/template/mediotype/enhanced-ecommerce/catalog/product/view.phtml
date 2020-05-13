@@ -6,7 +6,7 @@ $type = $product->getTypeId();
 ?>
 <script type="text/javascript">
 
-    <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+    <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>
 
     var endpoint = "https://bogdandev2.newsmanapp.com";
     //var endpoint = "https://retargeting.newsmanapp.com";
@@ -39,26 +39,33 @@ $type = $product->getTypeId();
     //<![CDATA[
 
     <?php
-    $impressionData = array(
-        "id" => $product->getId(),
-        "name" => $product->getName(),
-        "price" => $product->getPrice()
-    );
-    if ($product->getManufacturer()) {
-        $impressionData['brand'] = $product->getManufacturer();
-    }
-    if (isset($current_category)) {
-        $impressionData['category'] = $current_category->getName();
+$impressionData = array(
+    "id" => $product->getId(),
+    "name" => $product->getName(),
+    "price" => $product->getPrice(),
+);
+if ($product->getManufacturer()) {
+    $impressionData['brand'] = $product->getManufacturer();
+}
+if (isset($current_category)) {
+    $impressionData['category'] = $current_category->getName();
 
-    }
-    ?>
+}
+?>
     //        'dimension1': 'Member'            // Custom dimension (string).
     // TODO - integrate once product dimensions config have been created
 
+    var _isUpdate = false;
+    var action = jQuery('#product_addtocart_form').attr('action');
+                    if (action.indexOf("updateItemOptions") >= 0){
+                        _isUpdate = true;
+                    }
+
     _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
     _nzm.run('ec:setAction', 'detail');
+    var nzmQty = $('qty').value;
     //this should only grab this product's add to cart button
-    $$('.btn-cart').each(function (item) {       
+    $$('.btn-cart').each(function (item) {
         item.originonclick = item.onclick;
         item.onclick = function (e) {
 
@@ -79,47 +86,78 @@ $type = $product->getTypeId();
                             'name': name,
                             'parent_id': <?php echo $product->getId() ?>,
                             'quantity': item.value,
-                            <?php if(isset($current_category)): ?>
+                            <?php if (isset($current_category)): ?>
                             'category': '<?php echo $current_category->getName() ?>',
-                            <?php endif; ?>
+                            <?php endif;?>
                         };
 
                         var objjj = {
-                            'id': productId                     
+                            'id': productId,
+                            'quantity': item.value
                         };
-                    }               
-                    
+                    }
+
                     objj = productFieldObject;
                     objjR = objjj;
 
+if(_isUpdate)
+{
                     _nzm.run('ec:addProduct', objjR);
+}
                 });
-            } else {
-                var impObj = <?php echo json_encode($impressionData) ?>;
-              
-                impObj.quantity = $('qty').value;                
+                } else {
+                    var impObj = <?php echo json_encode($impressionData) ?>;
 
-                objj = impObj;
-                objjR = { 'id': impObj.id };
+                    impObj.quantity = $('qty').value;                  
 
-                _nzm.run('ec:addProduct', objjR);
-            }
+                    objj = impObj;
+                    objjR = {
+                        'id': impObj.id,
+                        'quantity': nzmQty
+                    };
+
+                    if(_isUpdate)
+    {
+                    _nzm.run('ec:addProduct', objjR);
+    }
+                }
+
+                if(_isUpdate)
+{
             _nzm.run('ec:setAction', 'remove');
+}
+
             item.onclick = item.originonclick;
 
+//remove - update
+            if(_isUpdate)
+{
             _nzm.run( 'send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function() {
-                
+
                      _nzm.run('ec:addProduct', objj);
 
                      _nzm.run('ec:setAction', 'add');
 
                     _nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {
 
-                         productAddToCartForm.submit(this);			
+                         productAddToCartForm.submit(this);
 
-                    }));           
+                    }));
             }) );
-     
+}
+//add to cart
+else{
+    _nzm.run('ec:addProduct', objj);
+
+_nzm.run('ec:setAction', 'add');
+
+_nzm.run('send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function () {
+
+    productAddToCartForm.submit(this);
+
+}));
+}
+
         }
     });
 
