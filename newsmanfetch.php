@@ -49,6 +49,8 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
     {
         $apikey = (empty($_GET["apikey"])) ? "" : $_GET["apikey"];
         $newsman = (empty($_GET["newsman"])) ? "" : $_GET["newsman"];
+        $start = (!empty($_GET["start"]) && $_GET["start"] >= 0) ? $_GET["start"] : 0;
+        $limit = (empty($_GET["limit"])) ? 10 : $_GET["limit"];
 
         if (!empty($newsman) && !empty($apikey)) {
             $apikey = $_GET["apikey"];
@@ -67,11 +69,12 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                     $ordersObj = array();
 
                     $orders = Mage::getModel('sales/order')->getCollection();
+                    $orders->getSelect()->limit($limit, $start);   
                     //->addFieldToFilter('status', 'complete')
 
                     foreach ($orders as $item) {
 
-                        $colOrder = $item->getData();
+                        $colOrder = $item->getData();   
 
                         $products = Mage::getModel('sales/order_item')->getCollection();
                         $productsJson = array();
@@ -116,6 +119,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                 case "products.json":
 
                     $products = Mage::getModel('catalog/product')->getCollection();
+                    $products->getSelect()->limit($limit, $start);         
 
                     $productsJson = array();
 
@@ -142,6 +146,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                 case "customers.json":
 
                     $wp_cust = $this->getCustomerCollection();
+                    $wp_cust->getSelect()->limit($limit, $start);  
 
                     $custs = array();
 
@@ -165,6 +170,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                 case "subscribers.json":
 
                     $wp_subscribers = $this->getSubscriberCollection();
+                    $wp_subscribers->getSelect()->limit($limit, $start); 
 
                     $subs = array();
 
