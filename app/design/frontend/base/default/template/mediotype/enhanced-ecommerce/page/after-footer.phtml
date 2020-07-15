@@ -1,9 +1,5 @@
 <?php
-/**
- * Pushing pageview send to the bottom of the page so that any ecommerce data is captured at the same time
- *
- * @author  Joel Hart
- */
+
 ?>
 <script type="text/javascript">
 
@@ -29,7 +25,7 @@
             _nzm.run('ec:setAction', 'remove');
 
             _nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
-               
+            
                 //_nzm.run('send', 'pageview');     
                 
                 //document.location.href = the_href

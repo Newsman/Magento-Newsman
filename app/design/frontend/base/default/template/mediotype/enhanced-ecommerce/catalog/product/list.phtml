@@ -1,9 +1,4 @@
 <?php
-/**
- *
- * @author  R. Dale Owen   @mediotype
- * @var $this Mage_Catalog_Block_Product_List
- */
 
 $productCollection = $this->getLoadedProductCollection();
 $helper = $this->helper('catalog/output');
@@ -15,8 +10,8 @@ $current_category = Mage::registry('current_category');
 <script type="text/javascript">
  <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
-var endpoint = "https://bogdandev2.newsmanapp.com";
-//var endpoint = "https://retargeting.newsmanapp.com";
+//var endpoint = "https://bogdandev2.newsmanapp.com";
+var endpoint = "https://retargeting.newsmanapp.com";
 
 var _nzm = _nzm || [];
 var _nzm_config = _nzm_config || [];
@@ -38,7 +33,7 @@ _nzm_tracking_server = endpoint;
 	script_dom.async = true;
 	script_dom.id = 'nzm-tracker';
 	script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
-	script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+	script_dom.src = endpoint + '/js/retargeting/track.js';
 	s.parentNode.insertBefore(script_dom, s);
 })();
 
@@ -53,8 +48,8 @@ _nzm.run('require', 'ec');
 
         <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
-        var endpoint = "https://bogdandev2.newsmanapp.com";
-        //var endpoint = "https://retargeting.newsmanapp.com";
+        //var endpoint = "https://bogdandev2.newsmanapp.com";
+        var endpoint = "https://retargeting.newsmanapp.com";
 
 		var _nzm = _nzm || [];
 		var _nzm_config = _nzm_config || [];
@@ -76,7 +71,7 @@ _nzm.run('require', 'ec');
 			script_dom.async = true;
 			script_dom.id = 'nzm-tracker';
             script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
-            script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+            script_dom.src = endpoint + '/js/retargeting/track.js';
 			s.parentNode.insertBefore(script_dom, s);
 		})();
 

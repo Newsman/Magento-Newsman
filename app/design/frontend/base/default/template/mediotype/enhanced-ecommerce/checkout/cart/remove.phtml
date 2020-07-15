@@ -1,7 +1,7 @@
 <?php
 
 $items = $this->getItems();
-//var_dump($items);
+
 ?>
 <?php if (count($items) >= 1): ?>
 	<script type="text/javascript">
@@ -9,8 +9,8 @@ $items = $this->getItems();
 		<?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
 
-        var endpoint = "https://bogdandev2.newsmanapp.com";
-        //var endpoint = "https://retargeting.newsmanapp.com";
+        //var endpoint = "https://bogdandev2.newsmanapp.com";
+        var endpoint = "https://retargeting.newsmanapp.com";
 		var _nzm = _nzm || [];
 		var _nzm_config = _nzm_config || [];
 		_nzm_tracking_server = endpoint;
@@ -31,7 +31,7 @@ $items = $this->getItems();
 			script_dom.async = true;
 			script_dom.id = 'nzm-tracker';
 			script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
-			script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+			script_dom.src = endpoint + '/js/retargeting/track.js';
 			s.parentNode.insertBefore(script_dom, s);
 		})();
 
@@ -70,7 +70,8 @@ $items = $this->getItems();
 
 					_nzm.run('ec:setAction', 'remove');
 
-					_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {				
+					_nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {		
+										
 						document.location.href = the_href
 					}));
 

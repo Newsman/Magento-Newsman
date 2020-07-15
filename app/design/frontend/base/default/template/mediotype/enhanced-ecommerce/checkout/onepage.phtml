@@ -1,16 +1,11 @@
 <?php
-/**
- *
- * @author  R. Dale Owen   @mediotype
- * @var $this Mage_Checkout_Block_Cart
- */
+
 $loggedIn = Mage::getSingleton('customer/session')->isLoggedIn();
 ?>
 <script type="text/javascript">
     //<![CDATA[
 
     <?php $newsman_id =  Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
-
 
     var endpoint = "https://retargeting.newsmanapp.com";
     var _nzm = _nzm || [];

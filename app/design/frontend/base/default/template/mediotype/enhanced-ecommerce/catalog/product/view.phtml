@@ -8,8 +8,8 @@ $type = $product->getTypeId();
 
     <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>
 
-    var endpoint = "https://bogdandev2.newsmanapp.com";
-    //var endpoint = "https://retargeting.newsmanapp.com";
+    //var endpoint = "https://bogdandev2.newsmanapp.com";
+    var endpoint = "https://retargeting.newsmanapp.com";
     var _nzm = _nzm || [];
     var _nzm_config = _nzm_config || [];
     _nzm_tracking_server = endpoint;
@@ -30,7 +30,7 @@ $type = $product->getTypeId();
         script_dom.async = true;
         script_dom.id = 'nzm-tracker';
         script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
-        script_dom.src = endpoint + '/js/retargeting/track.dev.js';
+        script_dom.src = endpoint + '/js/retargeting/track.js';
         s.parentNode.insertBefore(script_dom, s);
     })();
 
@@ -100,10 +100,10 @@ if (isset($current_category)) {
                     objj = productFieldObject;
                     objjR = objjj;
 
-if(_isUpdate)
-{
+                    if(_isUpdate)
+                    {
                     _nzm.run('ec:addProduct', objjR);
-}
+                    }
                 });
                 } else {
                     var impObj = <?php echo json_encode($impressionData) ?>;
@@ -117,15 +117,15 @@ if(_isUpdate)
                     };
 
                     if(_isUpdate)
-    {
+                    {
                     _nzm.run('ec:addProduct', objjR);
-    }
+                    }
                 }
 
                 if(_isUpdate)
-{
-            _nzm.run('ec:setAction', 'remove');
-}
+                {           
+                    _nzm.run('ec:setAction', 'remove');
+                }
 
             item.onclick = item.originonclick;
 
