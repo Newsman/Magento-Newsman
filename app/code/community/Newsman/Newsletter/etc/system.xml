@@ -317,7 +317,8 @@
                         </password>
                     </fields>
                 </smtp>
-                <popup_settings translate="label">
+                <!--
+                    <popup_settings translate="label">
                     <label>Newsletter Popup Settings</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>5</sort_order>
@@ -372,6 +373,7 @@
                         </delay_display>
                     </fields>
                 </popup_settings>
+                -->
                 <debug translate="label comment">
                     <label>Debug</label>
                     <frontend_type>text</frontend_type>
