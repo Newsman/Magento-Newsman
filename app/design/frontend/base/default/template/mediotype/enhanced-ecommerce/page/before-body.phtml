@@ -7,10 +7,11 @@
     <?php $newsman_id =  Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
 
-    //var endpoint = "https://bogdandev2.newsmanapp.com";
     var endpoint = "https://retargeting.newsmanapp.com";
+
     var _nzm = _nzm || [];
     var _nzm_config = _nzm_config || [];
+    _nzm_config['disable_datalayer'] = 1;
     _nzm_tracking_server = endpoint;
     (function () {
         var a, methods, i;
