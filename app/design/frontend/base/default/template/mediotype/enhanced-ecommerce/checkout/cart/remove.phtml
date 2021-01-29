@@ -13,9 +13,10 @@ $items = $this->getItems();
 
 		var _nzm = _nzm || [];
 		var _nzm_config = _nzm_config || [];
-		_nzm_config['disable_datalayer'] = 1;
 		_nzm_tracking_server = endpoint;
 		(function () {
+        _nzm_config['disable_datalayer'] = 1;
+
 			var a, methods, i;
 			a = function (f) {
 				return function () {
