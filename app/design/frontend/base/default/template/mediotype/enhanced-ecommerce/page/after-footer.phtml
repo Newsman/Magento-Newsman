@@ -42,22 +42,27 @@
     //update
     function refreshQtyButton(){
 
-        jQuery(".btn-edit").each(function(){
- 
-        _idQty = [];
+		jQuery(".btn-edit").each(function(){
 
-        var arrVal = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
+		_idQty = [];
 
-        //var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
-        var arrName = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
+		var arrVal = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
 
-        arrName = arrName.replace("cart[", "");
-        arrName = arrName.replace("][qty]", "");
+		//var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
+		var arrName = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
 
-        _idQty.push({
-        "id" : arrName,
-        "quantity": arrVal 
-        });
+		if(arrName == null)
+		{
+		   return;
+		}
+
+		arrName = arrName.replace("cart[", "");
+		arrName = arrName.replace("][qty]", "");
+
+		_idQty.push({
+		"id" : arrName,
+		"quantity": arrVal 
+		});
 
         });	
 
