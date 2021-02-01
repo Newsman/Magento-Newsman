@@ -75,7 +75,7 @@ _nzm.run('require', 'ec');
         $l = $order->getShippingAddress()->getLastname();
     ?>
 
-    _nzm.identify({ email: "<?php echo $e; ?>", first_name: <?php echo $f; ?>, last_name: <?php echo $l; ?> });
+    _nzm.identify({ email: "<?php echo $e; ?>", first_name: "<?php echo $f; ?>", last_name: "<?php echo $l; ?>" });
 
     _nzm.run('ec:setAction', 'purchase', <?php echo json_encode($actionData) ?>);
     _nzm.run('send', 'pageview');
