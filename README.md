@@ -23,7 +23,7 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
 
 4. Choose how often you want your lists to get uploaded to [Newsman](https://www.newsmanapp.com) You can also do a manual synchronization by clicking "Manual Sync".
 
-### Sync segmentation:
+## Sync segmentation:
 
 - Subscribers: email, subscriber_status, source (customer or visitor)
 - Customers: email, customerId, groupId, firstname, lastname, source
@@ -31,6 +31,10 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
   ![Synchronization Schedule](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/synchronization_schedule.png)
 
 5. For the automatic synchronization to work, you need to have Magento's built-in cron job functionality enabled.
+
+## SMTP
+
+Warning: You need to disable extra SMTP modules. 
 
 6. You have the option to send all Magento's transactional emails via Newsman's SMTP server. The server requires authentication, so here's how to set it up:
    ![Mail Sending Settings](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/mail_sending_settings.png)
@@ -40,4 +44,6 @@ Newsletter Subscriber Import > General Settings > Enable** and enable the module
 1. Go to **System > Configuration > Newsman Remarketing. Fill in your [Newsman](https://www.newsmanapp.com) Remarketing ID and click the save button.
 
   ![Remarketing](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/remarketing.png)
+  
+
 
