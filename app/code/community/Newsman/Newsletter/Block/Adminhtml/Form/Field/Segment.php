@@ -27,16 +27,18 @@ class Newsman_Newsletter_Block_Adminhtml_Form_Field_Segment extends Newsman_News
             $this->_segments = array();
             $storeId = Mage::helper('newsman_newsletter')->getScopeStoreId();
 
-            $lists =  Mage::getModel('newsman_newsletter/api_list')->getAll($storeId);
-            foreach ($lists as $list) {
-                $segments = Mage::getModel('newsman_newsletter/api_segment')->getAll($list['list_id'], $storeId);
+            $listId = Mage::getStoreConfig("newsman_newsletter/settings/list_id", $storeId);
+
+            //$lists =  Mage::getModel('newsman_newsletter/api_list')->getAll($storeId);
+            //foreach ($lists as $list) {
+                $segments = Mage::getModel('newsman_newsletter/api_segment')->getAll($listId, $storeId);
              
                 foreach ($segments as $segment) {
                     $key = "{$segment['segment_id']}";
-                    $name = "{$list['list_name']} - {$segment['segment_name']}";
+                    $name = "{$segment['segment_name']}";
                     $this->_segments[$key] = $name;
                 }
-            }   
+            //}   
 
         }
         if (!is_null($segmentId)) {
