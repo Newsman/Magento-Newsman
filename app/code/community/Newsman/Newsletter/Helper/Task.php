@@ -109,11 +109,9 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 	}
 
 	public function insertTasks()
-	{
-		$max = 9999;
-		$batchSize = Mage::helper('newsman_newsletter')->getCustomerBatchSize();
-		//Safe default
-		$batchSize = 5000;
+	{	
+		$max = 9999;	
+		$batchSize = 9000;
 
 		$customerEmail[] = "";
 		$customerId[] = "";
@@ -128,65 +126,76 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 		$stores = Mage::app()->getStores();
 
+		try{
 		foreach ($stores as $storeId => $store)
-		{
+		{									
+			$website_id = $store->website_id;
+
+			//overwrite
+			$batchSize = Mage::helper('newsman_newsletter')->getCustomerBatchSize($storeId);
+
 			Mage::app()->getLocale()->emulate($storeId);
-			Mage::app()->setCurrentStore($storeId);
+			Mage::app()->setCurrentStore($storeId);			
 
 			if (!Mage::helper('newsman_newsletter')->isEnabled())
 			{
 				return $this;
 			}
 
-			$listId = Mage::getStoreConfig("newsman_newsletter/settings/list_id", $storeId);
+			$listId = Mage::getStoreConfig("newsman_newsletter/settings/list_id", $store);
 
-			$importFilter = Mage::getStoreConfig(self::XML_PATH_NEWSMAN_IMPORTFILTER, $storeId);
+			$importFilter = Mage::getStoreConfig(self::XML_PATH_NEWSMAN_IMPORTFILTER, $store);
 
-			$mappedValues = Mage::helper('newsman_newsletter')->getSegments();
-			if (!$mappedValues)
+			$mappedValues = Mage::helper('newsman_newsletter')->getSegments($storeId);
+
+			//Get Subscribers filter 1
+	
+			$subscriberCollection = $this->getSubscriberCollection($storeId);
+
+			$customers_to_import = array();
+
+			foreach ($subscriberCollection as $sub)
 			{
-				$subscriberCollection = $this->getSubscriberCollection();
+				$type = "newsletter subscriber ";
 
-				$customers_to_import = array();
-
-				foreach ($subscriberCollection as $sub)
+				if($sub["customer_id"] == "0")
 				{
-					$type = "newsletter subscriber ";
-
-					if($sub["customer_id"] == "0")
-					{
-						$type .= "visitor";
-					}
-					else{
-						$type .= "customer";
-					}
-
-					$customers_to_import[] = array(
-						"email" => $sub["subscriber_email"],
-						"subscriber_status" => $sub["subscriber_status"],
-						"subscriber_type" => $type
-					);
-
-					if ((count($customers_to_import) % $batchSize) == 0)
-					{
-						$this->_importDataS($customers_to_import, $listId, null, $storeId);
-					}
+					$type .= "visitor";
+				}
+				else{
+					$type .= "customer";
 				}
 
-				if (count($customers_to_import) > 0)
+				$customers_to_import[] = array(
+					"email" => $sub["subscriber_email"],
+					"subscriber_status" => $sub["subscriber_status"],
+					"subscriber_type" => $type
+				);
+
+				if ((count($customers_to_import) % $batchSize) == 0)
 				{
-					$this->_importDataS($customers_to_import, $listId, null, $storeId);
+					$this->_importDataS($customers_to_import, $listId, array(), $storeId);
 				}
+			}
 
-				unset($customers_to_import);
+			if (count($customers_to_import) > 0)
+			{
+				$this->_importDataS($customers_to_import, $listId, array(), $storeId);
+			}		
 
-				$this->_insertTasks($subscriberCollection, '_insertSubscriberTask');
+			unset($customers_to_import);
+
+			$this->_insertTasks($subscriberCollection, '_insertSubscriberTask');			
+
+			if (!$mappedValues)
+			{							
+				//Get customers filter 2				
 
 				if ($importFilter == 2)
 				{
 					$customers_to_import = array();
-
-					$collection = $this->getCustomerCollection();
+				
+					$collection = $this->getCustomerCollection($website_id);						
 
 					foreach ($collection as $col)
 					{
@@ -216,23 +225,23 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						);
 
 						if ((count($customers_to_import) % $batchSize) == 0)
-						{
-							$this->_importDataG($customers_to_import, $listId, null, $storeId);
+						{						
+							$this->_importDataG($customers_to_import, $listId, array(), $storeId);
 						}
 					}
 
 					if (count($customers_to_import) > 0)
-					{
-						$this->_importDataG($customers_to_import, $listId, null, $storeId);
-					}
+					{						
+						$this->_importDataG($customers_to_import, $listId, array(), $storeId);
+					}				
 
 					unset($customers_to_import);
 
 					$this->_insertTasks($collection, '_insertSubscriberTask');
-				}
-
-				return $this;
+				}			
 			}
+
+			//Mapped values
 
 			$tempCustomerId[] = "";
 			$tempCustomerEmail[] = "";
@@ -245,7 +254,7 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 				{
 					$hasNonLoggedInIdGroup = true;
 					$insertMethod = '_insertSubscriberTask';
-					$collection = $this->getSubscriberCollection();
+					$collection = $this->getSubscriberCollection($storeId);
 
 					$this->_insertTasks($collection, $insertMethod, $mappedValue['customer_group_id'], $mappedValue['segment']);
 
@@ -256,7 +265,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 					$customers_to_import = array();
 
-					$subscriberCollection = $this->getSubscriberCollection();
+					$subscriberCollection = $this->getSubscriberCollection($storeId);
+
 					foreach ($subscriberCollection as $sub)
 					{
 						$type = "newsletter subscriber ";
@@ -292,7 +302,7 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					{
 						$customers_to_import = array();
 
-						$collection = $this->getCustomerCollection();
+						$collection = $this->getCustomerCollection($website_id);
 
 						$segment = array();
 						$segment[] = $mappedValue["segment"];
@@ -339,45 +349,13 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 						unset($customers_to_import);
 
 						$this->_insertTasks($collection, '_insertSubscriberTask');
-
-						/*Orders*/
-
-						/*$customers_to_import = array();
-						$storeId = Mage::app()->getStore()->getStoreId();
-						$ordercollection = Mage::getModel('sales/order')->getCollection()
-							->addFieldToFilter('status', 'complete')
-							->addFieldToFilter('store_id', $storeId);
-
-						foreach ($ordercollection as $_order)
-						{
-							$customerId[] = $_order->getCustomerId();
-							$customerEmail[] = $_order->getCustomerEmail();
-
-							$customers_to_import[] = array(
-								"email" => $_order->getCustomerEmail(),
-								"customerId" => $_order->getCustomerId()
-							);
-
-							if ((count($customers_to_import) % $batchSize) == 0)
-							{
-								//$this->_importDataC($customers_to_import, $listId, null, $storeId);
-							}
-						}
-
-						if (count($customers_to_import) > 0)
-						{
-							//$this->_importDataC($customers_to_import, $listId, null, $storeId);
-						}
-
-						unset($customers_to_import);*/
-
-						/*Orders*/
 					}
 				} else
 				{
 					$customers_to_import = array();
 
-					$collection = $this->getCustomerCollection();
+					$collection = $this->getCustomerCollection($website_id);
+		
 					$collection->addFieldToFilter('group_id', array('eq' => $mappedValue['customer_group_id']));
 
 					$segment = array();
@@ -428,7 +406,8 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 					
 					$customers_to_import = array();
 
-					$subscriberCollection = $this->getSubscriberCollection();
+					$subscriberCollection = $this->getSubscriberCollection($storeId);
+					
 					foreach ($subscriberCollection as $sub)
 					{
 						$type = "newsletter subscriber ";
@@ -466,29 +445,34 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 			Mage::app()->getLocale()->revert();
 		}
+	}
+		catch(Exception $e)
+		{
+			
+		}
 
 		return $this;
 	}
 
-	public function getSubscriberCollection()
+	public function getSubscriberCollection($storeId)
 	{
-		$storeId = Mage::app()->getStore()->getStoreId();
+		//$storeId = Mage::app()->getStore()->getStoreId();
 
 		$collection = Mage::getModel('newsletter/subscriber')->getCollection()
-			->addStoreFilter($storeId)
+			->addFieldToFilter('store_id', $storeId)
 			->addFieldToFilter('subscriber_status', 1);
 
 		return $collection;
 	}
 
-	public function getCustomerCollection()
+	public function getCustomerCollection($storeId)
 	{
-		$storeId = Mage::app()->getStore()->getStoreId();
+		//$storeId = Mage::app()->getStore()->getStoreId();
 
 		$collection = Mage::getModel('customer/customer')->getCollection()
 			->addAttributeToSelect('firstname')
 			->addAttributeToSelect('lastname')
-			->addFieldToFilter('store_id', $storeId);
+			->addFieldToFilter('website_id', $storeId);
 
 		return $collection;
 	}
