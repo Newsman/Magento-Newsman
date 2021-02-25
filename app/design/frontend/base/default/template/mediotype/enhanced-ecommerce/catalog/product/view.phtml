@@ -9,6 +9,7 @@ $type = $product->getTypeId();
     <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>
 
     var endpoint = "https://retargeting.newsmanapp.com";
+
     var _nzm = _nzm || [];
     var _nzm_config = _nzm_config || [];
     _nzm_tracking_server = endpoint;
@@ -64,7 +65,13 @@ if (isset($current_category)) {
 
     _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
     _nzm.run('ec:setAction', 'detail');
-    var nzmQty = $('qty').value;
+	
+    var nzmQty = '0';
+ 
+    if ($(".qty") != null){
+	nzmQty = $('qty').value;
+    }
+   
     //this should only grab this product's add to cart button
     $$('.btn-cart').each(function (item) {
         item.originonclick = item.onclick;
@@ -109,7 +116,7 @@ if (isset($current_category)) {
                 } else {
                     var impObj = <?php echo json_encode($impressionData) ?>;
 
-                    impObj.quantity = $('qty').value;                  
+                    impObj.quantity = $('qty').val();                  
 
                     objj = impObj;
                     objjR = {
