@@ -116,7 +116,7 @@ if (isset($current_category)) {
                 } else {
                     var impObj = <?php echo json_encode($impressionData) ?>;
 
-                    impObj.quantity = $('qty').val();                  
+                    impObj.quantity = $('qty').value;                 
 
                     objj = impObj;
                     objjR = {

@@ -5,14 +5,14 @@ $bootstrapFilename = $magentoRootDir . '/app/bootstrap.php';
 $mageFilename = $magentoRootDir . '/app/Mage.php';
 
 if (!file_exists($bootstrapFilename)) {
-    echo 'Bootstrap file not found';
-    exit;
+    //echo 'Bootstrap file not found';
+    //exit;
 }
 if (!file_exists($mageFilename)) {
     echo 'Mage file not found';
     exit;
 }
-require $bootstrapFilename;
+//require $bootstrapFilename;
 require $mageFilename;
 
 class NewsmanFetch extends Mage_Core_Helper_Abstract
@@ -51,6 +51,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
         $newsman = (empty($_GET["newsman"])) ? "" : $_GET["newsman"];
         $start = (!empty($_GET["start"]) && $_GET["start"] >= 0) ? $_GET["start"] : 0;
         $limit = (empty($_GET["limit"])) ? 10 : $_GET["limit"];
+	$product_id = (empty($_GET["product_id"])) ? "" : $_GET["product_id"];
 
         if (!empty($newsman) && !empty($apikey)) {
             $apikey = $_GET["apikey"];
@@ -118,7 +119,10 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
 
                 case "products.json":
 
-                    $products = Mage::getModel('catalog/product')->getCollection();
+		if(empty($product_id))
+		{
+                 
+		    $products = Mage::getModel('catalog/product')->getCollection();
                     $products->getSelect()->limit($limit, $start);         
 
                     $productsJson = array();
@@ -136,6 +140,22 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                             "price" => $prod["price"]
                         );
                     }
+
+		}
+		else{
+
+		        $prod = Mage::getModel('catalog/product')->load($product_id);
+			
+                        $prod = $prod->getData();
+
+                        $productsJson[] = array(
+                            "id" => $prod["entity_id"],
+                            "name" => $prod["name"],
+                            "stock_quantity" => $prod["is_in_stock"],
+                            "price" => $prod["price"]
+                        );
+	
+		}
 
                     header('Content-Type: application/json');
                     echo json_encode($productsJson, JSON_PRETTY_PRINT);
