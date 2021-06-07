@@ -6,7 +6,7 @@ This is the easiest way to connect your Shop with [Newsman](https://www.newsmana
 Installation
 
 ## Installation: 
-1. Copy the *"app"* contents directory to your "root" shop directory.
+1. Copy the *"app, js, lib, skin"* contents directory to your "root" shop directory.
 2. Copy 'newsmanfetch.php' to your magento root directory.
 		
 ## Configuration
