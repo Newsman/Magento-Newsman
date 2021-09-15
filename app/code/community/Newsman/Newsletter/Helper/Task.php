@@ -108,6 +108,23 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 		$data = array();
 	}
 
+	public function setFeed($store){
+
+		$listId = Mage::getStoreConfig("newsman_newsletter/settings/list_id", $store);
+
+		$helper = Mage::helper('newsman_newsletter');
+		$apiKey = $helper->getApiKey($store);
+
+		$url = Mage::getBaseUrl() . "newsmanfetch.php?newsman=products.json&apikey=" . $apiKey;
+		$url = str_replace("index.php/", "", $url);
+		$domain = Mage::getBaseUrl();
+		$domain = str_replace("index.php/", "", $domain);
+
+		Mage::getModel('newsman_newsletter/api_import')->setFeed($listId, $url, $domain, $store);	
+
+		return $this;
+	}
+
 	public function insertTasks()
 	{	
 		$max = 9999;	

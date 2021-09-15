@@ -11,12 +11,12 @@ $current_category = Mage::registry('current_category');
  <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
 var endpoint = "https://retargeting.newsmanapp.com";
-
+var _nzmPluginInfo = '1:Magento1.x';
 var _nzm = _nzm || [];
 var _nzm_config = _nzm_config || [];
+_nzm_config['disable_datalayer'] = 1;
 _nzm_tracking_server = endpoint;
 (function () {
-        _nzm_config['disable_datalayer'] = 1;
 
 	var a, methods, i;
 	a = function (f) {

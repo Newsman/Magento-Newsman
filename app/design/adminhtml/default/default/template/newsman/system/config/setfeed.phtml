@@ -1,0 +1,34 @@
+<?php
+/**
+ * @see Newsman_Newsletter_Block_Adminhtml_System_Config_SetFeed
+ */
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    function setFeed() {
+        var elem = $('<?php echo $this->getHtmlId() ?>');
+
+        new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
+            parameters: {store: "<?php echo (string)Mage::getSingleton('adminhtml/config_data')->getStore() ?>", website: "<?php echo (string)Mage::getSingleton('adminhtml/config_data')->getWebsite() ?>"},
+            onSuccess: function(response) {
+                result = '<?php echo Mage::helper('core')->jsQuoteEscape($this->__('The Feed setup failed.')) ?>';
+                try {
+                    response = response.responseText;
+                    if (response == 1) {
+                        result = '<?php echo Mage::helper('core')->jsQuoteEscape($this->__('Success! Feed setup successfully.')) ?>';
+                        elem.removeClassName('fail').addClassName('success')
+                    } else {
+                        elem.removeClassName('success').addClassName('fail')
+                    }
+                } catch (e) {
+                    elem.removeClassName('success').addClassName('fail')
+                }
+                $('set_feed_result').update(result);
+            }
+        });
+    }
+    //]]>
+</script>
+<button onclick="javascript:setFeed(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span id="set_feed_result"><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>

@@ -25,6 +25,42 @@ class Newsman_Newsletter_Adminhtml_Newsletter_System_Config_SynchronizationContr
         $this->getResponse()->setBody((int)$isSynced);
     }
 
+    public function setfeedAction()
+    {
+        $isSynced = true;
+        try {
+           
+            $storeId = Mage::app()->getStore();
+          
+            $params = $this->getRequest()->getParams();
+
+            $store = 0;
+
+            if (isset($params['store']) && $params['store']) {
+                $store = Mage::getModel('core/store')->load($params['store']);          
+            } elseif (isset($params['website']) && $params['website']) {
+                $store = Mage::getModel('core/website')->load($params['website']);        
+            }                                 
+
+            if(!is_numeric($store))
+            {
+                try{
+                    $store = $store->getWebsiteId();        
+                }
+                catch(Exception $e)
+                {
+                    $store = $store->getStoreId();
+                }
+            }               
+            
+            Mage::helper('newsman_newsletter/task')->setFeed($store);
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $isSynced = false;
+        }
+        $this->getResponse()->setBody((int)$isSynced);
+    }
+
     /**
      * Check is allowed access to action
      *

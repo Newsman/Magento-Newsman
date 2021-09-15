@@ -29,4 +29,19 @@ class Newsman_Newsletter_Model_Api_Import extends Newsman_Newsletter_Model_Api_N
         }
         return $result;
     }
+
+    public function setFeed($listId, $url, $domain, $storeId = null)
+    {
+        $result = null;
+        try {          
+            $result = $this->getClient($storeId)->feeds->setFeedOnList($listId, $url, $domain, "NewsMAN");	            								            
+             
+            if ($result == '') {
+                Mage::throwException(Mage::helper('newsman_newsletter')->__('Error on method setFeedOnList'));
+            }
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+        return $result;
+    }
 }
