@@ -8,6 +8,8 @@ $totals = $this->getTotals();
 
 <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
 
+if(_nzm == undefined)
+{
 var endpoint = "https://retargeting.newsmanapp.com";
 var _nzmPluginInfo = '1:Magento1.x';
 var _nzm = _nzm || [];
@@ -37,6 +39,7 @@ _nzm_tracking_server = endpoint;
 })();
 
 _nzm.run('require', 'ec');
+}
 
     <?php foreach($order->getItemsCollection() as $item): ?>
     <?php /** @var $item Mage_Sales_Model_Order_Item */
