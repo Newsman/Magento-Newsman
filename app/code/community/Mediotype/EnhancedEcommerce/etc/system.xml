@@ -2,16 +2,16 @@
 <config>
     <sections>
         <mediotype_ee translate="label" module="mediotype_ee">
-            <label>Newsman Remarketing Enhanced Ecommerce</label>
-            <tab>mediotype</tab>
+            <label>Newsman Remarketing</label>
+            <tab>newsman</tab>
             <frontend_type>text</frontend_type>
-            <sort_order>1005</sort_order>
+            <sort_order>1</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
                 <mediotype_ee_settings translate="label" module="mediotype_ee">
-                    <label>Newsman Remarketing Enhanced Ecommerce Settings</label>
+                    <label>Newsman Remarketing Settings</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>

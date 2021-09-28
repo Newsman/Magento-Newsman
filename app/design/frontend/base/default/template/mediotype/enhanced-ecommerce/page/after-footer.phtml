@@ -1,36 +1,57 @@
 <?php
 
 ?>
+
 <script type="text/javascript">
 
-    //remove
-    jQuery(".remove").each(function () {
-        jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {
+    var validateRemove = jQuery('#cart-sidebar a.remove').text();
+    var _classRemove = '#cart-sidebar a.remove';
 
-            var val = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
+    if(validateRemove == '')
+    {
+        validateRemove = jQuery('#cart-sidebar a.btn-remove').text();
+        _classRemove = '#cart-sidebar a.btn-remove';
+    }
+
+    //remove
+    jQuery(_classRemove).each(function (e) {
+
+        jQuery(this).bind("click", {"elem": jQuery(this)}, function (ev) {                 
+            
+            //var val = jQuery(this).parent().parent().find('.info-wrapper').find('input').val();
       
             //var name = jQuery(this).parent().parent().find('.product-cart-actions qty-wrapper').find('input').attr('name');
-            var name = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
+            //var name = jQuery(this).parent().parent().find('.info-wrapper').find('input').attr('data-item-id');  
 
-            name = name.replace("cart[", "");
-            name = name.replace("][qty]", "");
+            //name = name.replace("cart[", "");
+            //name = name.replace("][qty]", "");
+
+            var name = jQuery(this).closest('div').find('.btn-edit').attr('href');      
+            name = name.split('/');      
+
+            var id = '';
+
+            name.each(function(item){
+                if(Number.isInteger(parseInt(item)))
+                    id = item;
+            });          
 
             var the_href = ev.data.elem.attr('href');
 
             _nzm.run('ec:addProduct', {
-                'id': name,
-                'quantity': val
+                'id': id,
+                'quantity': 1
             });
 
             _nzm.run('ec:setAction', 'remove');
 
             _nzm.run('send', 'event', 'UX', 'click', 'remove from cart', null, _nzm.createFunctionWithTimeout(function () {
-            
+                  
                 //_nzm.run('send', 'pageview');     
                 
                 //document.location.href = the_href
             }));
-
+                  
             //return false;
         });
     });

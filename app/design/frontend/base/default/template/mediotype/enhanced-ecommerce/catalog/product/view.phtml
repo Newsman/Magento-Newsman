@@ -6,40 +6,7 @@ $type = $product->getTypeId();
 ?>
 <script type="text/javascript">
 
-    <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>
-
-    if(_nzm == undefined)
-    {
-        var endpoint = "https://retargeting.newsmanapp.com";
-        var _nzmPluginInfo = '1:Magento1.x';
-        var _nzm = _nzm || [];
-        var _nzm_config = _nzm_config || [];
-        _nzm_config['disable_datalayer'] = 1;
-        _nzm_tracking_server = endpoint;
-        (function () {
-
-            var a, methods, i;
-            a = function (f) {
-                return function () {
-                    _nzm.push([f].concat(Array.prototype.slice.call(arguments, 0)));
-                }
-            };
-            methods = ['identify', 'track', 'run'];
-            for (i = 0; i < methods.length; i++) {
-                _nzm[methods[i]] = a(methods[i])
-            }
-            ;
-            s = document.getElementsByTagName('script')[0];
-            var script_dom = document.createElement('script');
-            script_dom.async = true;
-            script_dom.id = 'nzm-tracker';
-            script_dom.setAttribute('data-site-id', '<?php echo $newsman_id ?>');
-            script_dom.src = endpoint + '/js/retargeting/track.js';
-            s.parentNode.insertBefore(script_dom, s);
-        })();
-
-        _nzm.run('require', 'ec');
-    }
+    <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>    
 
     //<![CDATA[
 
@@ -138,7 +105,7 @@ if (isset($current_category)) {
                     _nzm.run('ec:setAction', 'remove');
                 }
 
-            item.onclick = item.originonclick;
+            //item.onclick = item.originonclick;
 
             //remove - update
             if(_isUpdate)

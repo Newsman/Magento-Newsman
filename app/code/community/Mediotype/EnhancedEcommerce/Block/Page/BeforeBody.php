@@ -49,12 +49,12 @@ class Mediotype_EnhancedEcommerce_Block_Page_BeforeBody extends Mage_Core_Block_
      * @return string
      */
     protected function _toHtml()
-    {
-
-        if (!$this->getIsGoogleAnalyticsAvailable() || !$this->helper->getEnabled() ) {
+    {   
+        if (!$this->helper->getEnabled() ) {          
             return '';
-        }
-        return parent::_toHtml();
+        }  
+                
+        return parent::_toHtml();     
     }
 
     /**
