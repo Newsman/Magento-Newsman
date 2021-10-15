@@ -50,7 +50,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
         $apikey = (empty($_GET["apikey"])) ? "" : $_GET["apikey"];
         $newsman = (empty($_GET["newsman"])) ? "" : $_GET["newsman"];
         $start = (!empty($_GET["start"]) && $_GET["start"] >= 0) ? $_GET["start"] : 0;
-        $limit = (empty($_GET["limit"])) ? 10 : $_GET["limit"];
+        $limit = (empty($_GET["limit"])) ? 1000 : $_GET["limit"];
 	$product_id = (empty($_GET["product_id"])) ? "" : $_GET["product_id"];
 
         if (!empty($newsman) && !empty($apikey)) {
@@ -82,18 +82,35 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
 
                         foreach ($products as $prod) {
 
+                            $prod = Mage::getModel('catalog/product')->load($prod->getId());
+
+                            $prodObj = $prod;
                             $prod = $prod->getData();
 
+                            $price = $prod["price"];
+                            $priceOld = (!empty($prod["special_price"])) ? $prod["special_price"] : 0;
+
+                            if($priceOld > 0)
+                            {
+                                $priceOld = $price;
+                                $price = $prod["special_price"];
+                            }
+
                             $productsJson[] = array(
-                                "id" => $prod['item_id'],
+                                "id" => $prod['entity_id'],
                                 "name" => $prod['name'],
                                 "quantity" => $prod['qty_ordered'],
-                                "price" => $prod['price']
+                                "price" => $price,
+                                "price_old" => $priceOld,
+                                "image_url" => $prodObj->getImageUrl(),
+                                "url" => 'https://' . $_SERVER['HTTP_HOST'] . '/' . $prodObj->getUrlPath()
                             );
                         }
 
                         $ordersObj[] = array(
                             "order_no" => $colOrder["entity_id"],
+                            "date" => "",
+                            "status" => "",
                             "lastname" => $colOrder["customer_lastname"],
                             "firstname" => $colOrder["customer_firstname"],
                             "email" => $colOrder["email"],
@@ -119,43 +136,70 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
 
                 case "products.json":
 
-		if(empty($product_id))
-		{
-                 
-		    $products = Mage::getModel('catalog/product')->getCollection();
-                    $products->getSelect()->limit($limit, $start);         
+                    if(empty($product_id))
+                    {
+                            
+                        $products = Mage::getModel('catalog/product')->getCollection();
+                                $products->getSelect()->limit($limit, $start);         
 
-                    $productsJson = array();
+                                $productsJson = array();
 
-                    foreach ($products as $prod) {
+                                foreach ($products as $prod) {                                    
 
-                        $prod = Mage::getModel('catalog/product')->load($prod->getId());
+                                    $prod = Mage::getModel('catalog/product')->load($prod->getId());
 
-                        $prod = $prod->getData();
+                                    $prodObj = $prod;
+                                    $prod = $prod->getData();
 
-                        $productsJson[] = array(
-                            "id" => $prod["entity_id"],
-                            "name" => $prod["name"],
-                            "stock_quantity" => $prod["is_in_stock"],
-                            "price" => $prod["price"]
-                        );
+                                    $price = $prod["price"];
+                                    $priceOld = (!empty($prod["special_price"])) ? $prod["special_price"] : 0;
+                                    
+                                    if($priceOld > 0)
+                                    {
+                                        $priceOld = $price;
+                                        $price = $prod["special_price"];
+                                    }
+
+                                    $productsJson[] = array(
+                                        "id" => $prod["entity_id"],
+                                        "name" => $prod["name"],
+                                        "stock_quantity" => $prod["is_in_stock"],
+                                        "price" => $price,
+                                        "price_old" => $priceOld,
+                                        "image_url" => $prodObj->getImageUrl(),
+                                        "url" => 'https://' . $_SERVER['HTTP_HOST'] . '/' . $prodObj->getUrlPath()
+                                    );
+                                    
+                                }
+
                     }
+                    else{
 
-		}
-		else{
-
-		        $prod = Mage::getModel('catalog/product')->load($product_id);
-			
+                        $prod = Mage::getModel('catalog/product')->load($product_id);
+                    
+                        $prodObj = $prod;
                         $prod = $prod->getData();
+
+                        $price = $prod["price"];
+                        $priceOld = (!empty($prod["special_price"])) ? $prod["special_price"] : 0;
+                        
+                        if($priceOld > 0)
+                        {
+                            $priceOld = $price;
+                            $price = $prod["special_price"];
+                        }
 
                         $productsJson[] = array(
                             "id" => $prod["entity_id"],
                             "name" => $prod["name"],
                             "stock_quantity" => $prod["is_in_stock"],
-                            "price" => $prod["price"]
+                            "price" => $price,
+                            "price_old" => $priceOld,
+                            "image_url" => $prodObj->getImageUrl(),
+                            "url" => 'https://' . $_SERVER['HTTP_HOST'] . '/' . $prodObj->getUrlPath()
                         );
-	
-		}
+                
+                    }
 
                     header('Content-Type: application/json');
                     echo json_encode($productsJson, JSON_PRETTY_PRINT);
@@ -208,6 +252,17 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                     header('Content-Type: application/json');
                     echo json_encode($subs, JSON_PRETTY_PRINT);
                     return;
+
+                    break;
+                case "version.json":
+
+                        $version = array(
+                            "version" => "Magento 1.9.x"
+                        );
+
+                        header('Content-Type: application/json');
+                        echo json_encode($version, JSON_PRETTY_PRINT);
+                        return;
 
                     break;
             }

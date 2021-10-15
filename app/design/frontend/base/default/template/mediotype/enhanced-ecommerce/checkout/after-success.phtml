@@ -6,16 +6,32 @@ $totals = $this->getTotals();
 ?>
 <script type="text/javascript">
 
-<?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id'); ?>
+<?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');
+
+    $e = $order->getShippingAddress()->getEmail();
+    $f = $order->getShippingAddress()->getFirstname();
+    $l = $order->getShippingAddress()->getLastname();
+
+?>    
+
+    _nzm.identify({ email: "<?php echo $e; ?>", first_name: "<?php echo $f; ?>", last_name: "<?php echo $l; ?>" });
 
     <?php foreach($order->getItemsCollection() as $item): ?>
     <?php /** @var $item Mage_Sales_Model_Order_Item */
           /** @var $product Mage_Catalog_Model_Product */ ?>
-    <?php $product = Mage::getModel('catalog/product')->load($item->getProductId()); ?>
+    <?php 
+    $product = Mage::getModel('catalog/product')->load($item->getProductId());
+    $cats = $product->getCategoryIds();
+    foreach ($cats as $category_id) {
+        $_cat = Mage::getModel('catalog/category')->setStoreId(Mage::app()->getStore()->getId())->load($category_id);
+            $cats = $_cat->getName();             
+    }
+    ?>
     <?php
         $impressionData = array(
             "id" => $product->getId(),
             "name" => $product->getName(),
+            "category" => $cats,
             "price" => $item->getPrice(),
             "quantity" => $item->getQtyOrdered()
             );
@@ -25,8 +41,10 @@ $totals = $this->getTotals();
         if($order->getDiscountDescription()){
             $impressionData['coupon'] =$order->getDiscountDescription();
         }
-    ?>
-    //ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+    ?>        
+
+    _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
+
     <?php endforeach; ?>
     <?php
         $actionData = array(
@@ -39,13 +57,7 @@ $totals = $this->getTotals();
         if($order->getDiscountDescription()){
             $actionData['coupon'] = $order->getDiscountDescription();
         }
-
-        $e = $order->getShippingAddress()->getEmail();
-        $f = $order->getShippingAddress()->getFirstname();
-        $l = $order->getShippingAddress()->getLastname();
     ?>
-
-    _nzm.identify({ email: "<?php echo $e; ?>", first_name: "<?php echo $f; ?>", last_name: "<?php echo $l; ?>" });
 
     _nzm.run('ec:setAction', 'purchase', <?php echo json_encode($actionData) ?>);
     _nzm.run('send', 'pageview');
