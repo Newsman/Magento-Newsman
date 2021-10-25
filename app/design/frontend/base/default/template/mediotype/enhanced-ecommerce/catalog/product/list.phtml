@@ -99,11 +99,9 @@ $current_category = Mage::registry('current_category');
 		});
 		*/
 
-		//create ga add event for adding to cart
 		$$('.btn-cart').each(function (item) {
 			item.originonclick = item.onclick;
-
-			// new click handler
+		
 			item.onclick = function (elmn) {
 
 				elmn.preventDefault();
@@ -141,7 +139,7 @@ $current_category = Mage::registry('current_category');
 
 
 				var productFieldObject = {
-					'id': productId,                   // Product ID (string).
+					'id': productId,                
 					'name': name,
 					'quantity': 1,
 					<?php if(isset($current_category)): ?>
@@ -151,11 +149,12 @@ $current_category = Mage::registry('current_category');
 				};
 				_nzm.run('ec:addProduct', productFieldObject);
 				_nzm.run( 'ec:setAction', 'add' );
-				item.onclick = item.originonclick;	
+				
+				//item.onclick = item.originonclick;	
 
 				_nzm.run( 'send', 'event', 'UX', 'click', 'add to cart', null, _nzm.createFunctionWithTimeout(function() {
 							
-					item.click();
+					item.click();					
            
          			   }) );
 

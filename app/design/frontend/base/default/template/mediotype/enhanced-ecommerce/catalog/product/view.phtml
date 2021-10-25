@@ -24,8 +24,6 @@ if (isset($current_category)) {
 
 }
 ?>
-    //        'dimension1': 'Member'            // Custom dimension (string).
-    // TODO - integrate once product dimensions config have been created
 
     var _isUpdate = false;
     var action = jQuery('#product_addtocart_form').attr('action');
@@ -45,6 +43,7 @@ if (isset($current_category)) {
     //this should only grab this product's add to cart button
     $$('.btn-cart').each(function (item) {
         item.originonclick = item.onclick;
+        
         item.onclick = function (e) {
 
             e.preventDefault();
@@ -125,7 +124,7 @@ if (isset($current_category)) {
             }
             //add to cart
             else{
-                _nzm.run('ec:addProduct', objj);
+            _nzm.run('ec:addProduct', objj);
 
             _nzm.run('ec:setAction', 'add');
 
