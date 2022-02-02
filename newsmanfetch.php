@@ -51,17 +51,20 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
         $newsman = (empty($_GET["newsman"])) ? "" : $_GET["newsman"];
         $start = (!empty($_GET["start"]) && $_GET["start"] >= 0) ? $_GET["start"] : 0;
         $limit = (empty($_GET["limit"])) ? 1000 : $_GET["limit"];
-	$product_id = (empty($_GET["product_id"])) ? "" : $_GET["product_id"];
+	    $product_id = (empty($_GET["product_id"])) ? "" : $_GET["product_id"];
 
-        if (!empty($newsman) && !empty($apikey)) {
+        if (!empty($newsman) && !empty($apikey) || $newsman == "getCart.json") {
             $apikey = $_GET["apikey"];
             $currApiKey = $_apikey;
 
-            if ($apikey != $currApiKey) {
-                http_response_code(403);
-                header('Content-Type: application/json');
-                echo json_encode(403, JSON_PRETTY_PRINT);
-                return;
+            if($newsman != "getCart.json")
+            {
+                if ($apikey != $currApiKey) {
+                    http_response_code(403);
+                    header('Content-Type: application/json');
+                    echo json_encode(403, JSON_PRETTY_PRINT);
+                    return;
+                }
             }
 
             switch ($_GET["newsman"]) {
@@ -265,6 +268,34 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                         return;
 
                     break;
+                case "getCart.json":
+
+                    if ((bool)$_POST["post"] == true) {              
+
+                        Mage::app('default');
+                        Mage::getSingleton('core/session', array('name' => 'frontend'));
+
+                        $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();                                                
+
+                        $prod = array();
+
+                        foreach ( $cart as $cart_item ) {                                 
+
+                                $prod[] = array(
+                                    "id" => $cart_item->getId(),
+                                    "name" => $cart_item->getName(),
+                                    "price" => $cart_item->getPrice(),						
+                                    "quantity" => $cart_item->getQty()
+                                );							
+                                                    
+                            }		                        
+
+                            header('Content-Type: application/json');
+                            echo json_encode($prod, JSON_PRETTY_PRINT);  
+                        return;
+                    }
+
+                break;
             }
         } else {
             http_response_code(403);
