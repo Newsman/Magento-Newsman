@@ -26,6 +26,7 @@ $current_category = Mage::registry('current_category');
         _nzm.run('ec:addImpression', <?php echo json_encode($impressionData) ?>);
         //add click analysis to the links
         var rLinks = $$('#block-related > li:nth-child(<?php echo $position ?>) a');
+        /*
         rLinks.each(function(link){
             link.onclick = function() {
                 <?php unset($impressionData['list']) ?>
@@ -34,6 +35,7 @@ $current_category = Mage::registry('current_category');
                 _nzm.run('send', 'event', 'UX', 'click', 'add to cart');
             };
         });
+        */
 
         <?php endforeach; ?>
 

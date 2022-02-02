@@ -23,16 +23,19 @@ $current_category = Mage::registry('current_category');
 		<?php foreach ($productCollection as $product): ?>
 		<?php //create php standard class convert to json string ?>
 		<?php
+		
 		$impressionData = array(
 			"id" => $product->getId(),
 			"name" => $product->getName(),
 			"position" => ++$position
 
 		);
+
 		if ($product->getManufacturer())
 		{
 			$impressionData['brand'] = $product->getManufacturer();
 		}
+
 		if (isset($current_category))
 		{
 			$impressionData['category'] = $current_category->getName();
@@ -42,6 +45,7 @@ $current_category = Mage::registry('current_category');
 		{
 			$impressionData['list'] = "Search Results";
 		}
+
 		?>
 
 		_nzm.run('ec:addImpression', <?php echo json_encode($impressionData)?>);
@@ -99,6 +103,7 @@ $current_category = Mage::registry('current_category');
 		});
 		*/
 
+		/*
 		$$('.btn-cart').each(function (item) {
 			item.originonclick = item.onclick;
 		
@@ -161,6 +166,7 @@ $current_category = Mage::registry('current_category');
 			};
 
 		});
+		*/
 
 		_nzm.run('send', 'pageview');
 		//]]>

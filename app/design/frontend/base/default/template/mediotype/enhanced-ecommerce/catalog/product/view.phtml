@@ -4,7 +4,7 @@ $product = $this->getCurrentProduct();
 $current_category = Mage::registry('current_category');
 $type = $product->getTypeId();
 ?>
-<script type="text/javascript">
+<script type="text/javascript">    
 
     <?php $newsman_id = Mage::getStoreConfig('mediotype_ee/mediotype_ee_settings/account_id');?>    
 
@@ -34,6 +34,7 @@ if (isset($current_category)) {
     _nzm.run('ec:addProduct', <?php echo json_encode($impressionData) ?>);
     _nzm.run('ec:setAction', 'detail');
 	
+    /*
     var nzmQty = '0';
  
     if ($(".qty") != null){
@@ -141,4 +142,9 @@ if (isset($current_category)) {
     _nzm.run('send', 'pageview');
 
     //]]>
+
+    */
+
+    _nzm.run('send', 'pageview');
+
 </script>
