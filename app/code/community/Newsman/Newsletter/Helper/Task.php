@@ -489,7 +489,7 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 		$collection = Mage::getModel('customer/customer')->getCollection()
 			->addAttributeToSelect('firstname')
 			->addAttributeToSelect('lastname')
-			->addFieldToFilter('website_id', $storeId);
+			->addFieldToFilter('website_id', $storeId)
 			->addFieldToFilter('is_active', 1);
 
 		return $collection;
