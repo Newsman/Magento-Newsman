@@ -26,22 +26,6 @@ $current_category = Mage::registry('current_category');
                     }
                     $impressionData['list'] = "Upsell Products";
                 ?>
-                ga('ec:addImpression', <?php echo json_encode($impressionData) ?>);
-                //add click analysis to the links
-                var uLinks = $$('#upsell-product-table tr:nth-child(<?php echo $_i + 1 ?>) td:nth-child(<?php echo $_j + 1 ?>) a');
-                uLinks.each(function(link){
-                    link.onclick = function() {
-                        console.log('click worked');
-                        <?php unset($impressionData['list']) ?>
-                        ga('ec:addProduct', <?php echo json_encode($impressionData) ?>);
-                        ga('ec:setAction', 'click',{list: 'Upsell Products'});
-                        ga('send', 'event', 'UX', 'click', 'Upsell Products',{
-                            'hitCallback': function() {
-                                document.location = link.href;
-                            }
-                        });
-                    };
-                });
                 <?php endif; ?>
             <?php endfor; ?>
         <?php endfor; ?>
