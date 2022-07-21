@@ -53,12 +53,38 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
         $limit = (empty($_GET["limit"])) ? 1000 : $_GET["limit"];
 	    $product_id = (empty($_GET["product_id"])) ? "" : $_GET["product_id"];
 
-        if (!empty($newsman) && !empty($apikey) || $newsman == "getCart.json") {
+        if (!empty($newsman) && !empty($apikey) || strpos($_GET["newsman"], 'getCart.json') !== false) {
             $apikey = $_GET["apikey"];
             $currApiKey = $_apikey;
 
-            if($newsman != "getCart.json")
+            if(strpos($_GET["newsman"], 'getCart.json') !== false)
             {
+                Mage::app('default');
+                Mage::getSingleton('core/session', array('name' => 'frontend'));
+
+                $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();                                                
+
+                $prod = array();
+
+                foreach ( $cart as $cart_item ) {                                 
+
+                        $prod[] = array(
+                            "id" => $cart_item->getId(),
+                            "name" => $cart_item->getName(),
+                            "price" => $cart_item->getPrice(),						
+                            "quantity" => $cart_item->getQty()
+                        );							
+                                            
+                    }		                        
+
+                    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+                    header("Cache-Control: post-check=0, pre-check=0", false);
+                    header("Pragma: no-cache");
+                    header('Content-Type:application/json');
+                    echo json_encode($prod, JSON_PRETTY_PRINT);
+                    exit;
+            }
+            else{
                 if ($apikey != $currApiKey) {
                     http_response_code(403);
                     header('Content-Type: application/json');
@@ -273,31 +299,6 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                         return;
 
                     break;
-                case "getCart.json":                            
-
-                    Mage::app('default');
-                    Mage::getSingleton('core/session', array('name' => 'frontend'));
-
-                    $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();                                                
-
-                    $prod = array();
-
-                    foreach ( $cart as $cart_item ) {                                 
-
-                            $prod[] = array(
-                                "id" => $cart_item->getId(),
-                                "name" => $cart_item->getName(),
-                                "price" => $cart_item->getPrice(),						
-                                "quantity" => $cart_item->getQty()
-                            );							
-                                                
-                        }		                        
-
-                        header('Content-Type: application/json');
-                        echo json_encode($prod, JSON_PRETTY_PRINT);  
-                    return;
-
-                break;
             }
         } else {
             http_response_code(403);
