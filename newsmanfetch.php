@@ -69,7 +69,7 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                 foreach ( $cart as $cart_item ) {                                 
 
                         $prod[] = array(
-                            "id" => $cart_item->getId(),
+                            "id" => $cart_item->getProductId(),
                             "name" => $cart_item->getName(),
                             "price" => $cart_item->getPrice(),						
                             "quantity" => $cart_item->getQty()
