@@ -46,5 +46,6 @@ Warning: You need to disable extra SMTP modules.
 
   ![Remarketing](https://raw.githubusercontent.com/Newsman/Magento-Newsman/master/assets/remarketing.png)
   
+After the plugin is installed, you will also have: feed product, events (product impressions, AddToCart, purchase) automatically implemented.  
 
 
