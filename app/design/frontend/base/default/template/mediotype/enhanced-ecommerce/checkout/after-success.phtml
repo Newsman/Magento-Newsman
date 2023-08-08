@@ -14,8 +14,6 @@ $totals = $this->getTotals();
 
 ?>    
 
-    _nzm.identify({ email: "<?php echo $e; ?>", first_name: "<?php echo $f; ?>", last_name: "<?php echo $l; ?>" });
-
     <?php foreach($order->getItemsCollection() as $item): ?>
     <?php /** @var $item Mage_Sales_Model_Order_Item */
           /** @var $product Mage_Catalog_Model_Product */ ?>
