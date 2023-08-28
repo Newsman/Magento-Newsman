@@ -180,11 +180,6 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
                                         $prodObj = $prod;
                                         $prod = $prod->getData();
     
-                                        if($prod["entity_id"] == 2)
-                                        {
-                                        var_dump($prod);die('');
-                                        }
-    
                                         $price = $prod["price"];
                                         $priceOld = (!empty($prod["special_price"])) ? $prod["special_price"] : 0;
                                         
