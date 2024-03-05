@@ -59,7 +59,6 @@ class NewsmanFetch extends Mage_Core_Helper_Abstract
 
             if(strpos($_GET["newsman"], 'getCart.json') !== false)
             {
-                Mage::app('default');
                 Mage::getSingleton('core/session', array('name' => 'frontend'));
 
                 $cart = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();                                                
