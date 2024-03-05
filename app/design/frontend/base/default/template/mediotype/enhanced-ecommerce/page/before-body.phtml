@@ -8,7 +8,7 @@
 //Newsman remarketing tracking code REPLACEABLE
 
 var remarketingid = '<?php echo $newsman_id ?>';
-var _nzmPluginInfo = '1.5:magento1.x';
+var _nzmPluginInfo = '1.6:magento1.x';
 
 //Newsman remarketing tracking code REPLACEABLE
 
@@ -49,7 +49,7 @@ _nzm_tracking_server = endpoint;
 })();
 _nzm.run('require', 'ec');
 
-//Newsman remarketing tracking code      
+//Newsman remarketing tracking code  
 
 //Newsman remarketing auto events REPLACEABLE
 
@@ -265,7 +265,7 @@ var ajaxurl = 'https://' + document.location.hostname + '/newsmanfetch.php?newsm
 					}
 					var msClickPassed = new Date();
 					var timeDiff = msClickPassed.getTime() - msClick.getTime();
-					if (timeDiff > 1000) {
+					if (timeDiff > 5000) {
 						validate = false;
 					} else {
 						timeValidate = true;

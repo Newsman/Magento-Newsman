@@ -117,8 +117,10 @@ class Newsman_Newsletter_Helper_Task extends Mage_Core_Helper_Abstract
 
 		$url = Mage::getBaseUrl() . "newsmanfetch.php?newsman=products.json&apikey=" . $apiKey;
 		$url = str_replace("index.php/", "", $url);
+		$url = str_replace("admin/", "", $url);
 		$domain = Mage::getBaseUrl();
 		$domain = str_replace("index.php/", "", $domain);
+		$domain = str_replace("admin/", "", $domain);
 
 		Mage::getModel('newsman_newsletter/api_import')->setFeed($listId, $url, $domain, $store);	
 
