@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <adminhtml>
+        <layout>
+            <updates>
+                <newsman_newsletter>
+                    <file>newsman_newsletter.xml</file>
+                </newsman_newsletter>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

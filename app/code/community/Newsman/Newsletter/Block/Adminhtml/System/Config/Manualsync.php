@@ -33,6 +33,14 @@ class Newsman_Newsletter_Block_Adminhtml_System_Config_Manualsync extends Mage_A
         return parent::render($element);
     }
 
+    public function oauthUrl(){
+		$redirUri = urlencode("https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+		$redirUri = str_replace("amp%3B", "", $redirUri);
+		$data["oauthUrl"] = "https://newsman.app/admin/oauth/authorize?response_type=code&client_id=nzmplugin&nzmplugin=Magento&scope=api&redirect_uri=" . $redirUri;
+
+        return $data["oauthUrl"];
+    }
+    
     /**
      * Get the button and scripts contents
      *

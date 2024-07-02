@@ -22,7 +22,67 @@ class Newsman_Newsletter_Adminhtml_Newsletter_System_Config_SynchronizationContr
             Mage::logException($e);
             $isSynced = false;
         }
-        $this->getResponse()->setBody((int)$isSynced);
+        
+        $code = $this->getRequest()->getPost('code');
+        $response = array();
+
+        if ($code) {
+
+            $authUrl = "https://newsman.app/admin/oauth/token";
+
+			$redirect = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+			$body = array(
+				"grant_type" => "authorization_code",
+				"code" => $code,
+				"client_id" => "nzmplugin",
+				"redirect_uri" => $redirect
+			);
+
+			$ch = curl_init($authUrl);
+
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+			$response = curl_exec($ch);
+
+			if (curl_errno($ch)) {
+				$error .= 'cURL error: ' . curl_error($ch);
+			}
+
+			curl_close($ch);
+
+			if ($response !== false) {
+
+				$response = json_decode($response);
+
+				$data["creds"] = json_encode(array(
+					"newsman_userid" => $response->user_id,
+					"newsman_apikey" => $response->access_token
+					)
+				);
+
+				foreach($response->lists_data as $list => $l){
+					$dataLists[] = array(
+						"id" => $l->list_id,
+						"name" => $l->name
+					);
+				}	
+
+				$data["dataLists"] = $dataLists;
+
+				$data["oauthStep"] = 2;
+			} else {
+				$error .= "Error sending cURL request.";
+			} 
+        } else {
+            $response['message'] = 'Invalid code parameter.';
+        }
+
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
+
+        //$this->getResponse()->setBody((int)$isSynced);
     }
 
     public function setfeedAction()

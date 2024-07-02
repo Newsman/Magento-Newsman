@@ -26,6 +26,59 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        var oauthUrl = "<?php echo $this->oauthUrl(); ?>";
+
+        var button = document.getElementById('newsman_action_button');
+        if (button) {
+            button.href = oauthUrl;
+        }
+
+        var newsmanIsOauth = false;
+
+        var apiKeyInput = document.getElementById('newsman_newsletter_settings_apikey');
+        var userIdInput = document.getElementById('newsman_newsletter_settings_userid');
+        if (apiKeyInput && apiKeyInput.value.trim() === '') {
+            newsmanIsOauth = true;
+        } 
+        
+        var showButtonSection = newsmanIsOauth;
+
+        if (showButtonSection) {
+            document.getElementById('row_newsman_newsletter_settings_newsman_button_placeholder').style.display = 'table-row';
+        } else {
+            document.getElementById('row_newsman_newsletter_settings_newsman_button_placeholder').style.display = 'none';
+        }
+
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('code')) {
+            var code = urlParams.get('code');
+            new Ajax.Request('<?php echo $this->getAjaxUrl() ?>', {
+                method: 'post',
+                parameters: { code: code },
+                onSuccess: function(response) {
+                    var result;
+                    try {
+                        response = JSON.parse(response.responseText);
+
+                        var apiKeyInput = document.getElementById('newsman_newsletter_settings_apikey');
+                        var userIdInput = document.getElementById('newsman_newsletter_settings_userid');
+
+                        if (userIdInput && apiKeyInput) {
+                            userIdInput.value = response.user_id;
+                            apiKeyInput.value = response.access_token;
+                        }
+                    } catch (e) {
+                        result = '<?php echo Mage::helper('core')->jsQuoteEscape($this->__('The manual sync failed.')) ?>';
+                        $('manual_sync_result').removeClassName('success').addClassName('fail');
+                    }
+                    $('manual_sync_result').update(result);
+                }
+            });
+        }
+    });
     //]]>
 </script>
 <button onclick="javascript:manualSync(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
